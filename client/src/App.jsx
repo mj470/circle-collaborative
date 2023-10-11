@@ -32,7 +32,7 @@ const themeToggler = () => {
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
       <Body>
         <Router>
-          <Container maxWidth="lg">
+          {/* <Container maxWidth="lg"> */}
             <Navbar theme={theme} toggleTheme={themeToggler} />
             <HeroSection />
             <Wrapper>
@@ -40,7 +40,7 @@ const themeToggler = () => {
               <Contact />
             </Wrapper>
             <Footer />
-          </Container>
+          {/* </Container> */}
         </Router>
       </Body>
     </ThemeProvider>
