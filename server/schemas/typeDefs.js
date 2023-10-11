@@ -13,7 +13,7 @@ type User {
 
 type Group {
     _id: ID
-    groupName: String
+    groupName: String!
     groupDescription: String
     posts: [Post]
     users: [User]
@@ -37,7 +37,8 @@ type Comment {
 
 type Interest {
     _id: ID
-    interestText: String
+    interestName: String,
+    assocGroups: [Group]
 }
 
 type Auth {
@@ -55,6 +56,7 @@ type Query {
     post(_id: ID!): Post
     interests: [Interest]
     interest(_id: ID!): Interest
+}
 
 type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
@@ -63,12 +65,18 @@ type Mutation {
     addInterest(interestText: String!): Interest
     addPost(postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
-    addInterestToUser(interestText: String!): User
-    addUsersToGroup(username: String!): Group
+    addInterestToUser(interestId: ID! interestName: String!): User
+    addInterestToGroup(interestId: ID! interestName: String!): Group
+    addUserToGroup(username: String!): Group
     deleteGroup(groupName: String!): Group
     deleteUser(username: String!): User
     deleteInterest(interestText: String!): Interest
+    deleteInterestFromUser(interestText: String!): User
     deletePost(postId: ID!): Post
     deleteComment(postId: ID!, commentId: ID!): Post
+    editPost(postId: ID!, postText: String!): Post
+    deleteUserFromGroup(groupName: String!): Group
 }
-}`
+`;
+
+module.exports = typeDefs;
