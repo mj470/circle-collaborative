@@ -1,4 +1,4 @@
-const Group = require('../models/Group');
+const { Interest } = require('../../models/Interest');
 
 const addInterestToGroup = async (groupId, interestId) => {
     try {
