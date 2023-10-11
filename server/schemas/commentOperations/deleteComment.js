@@ -1,4 +1,4 @@
-const Post = require('../../models/Post');
+const { Post } = require('../../models');
 
 const deleteComment = async (postId, commentId) => {
     try {
@@ -13,4 +13,4 @@ const deleteComment = async (postId, commentId) => {
     }
 }
 
-model.exports = deleteComment;
+module.exports = deleteComment;

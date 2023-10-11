@@ -1,6 +1,6 @@
-const Group = require('../models/Group');
+const { Group } = require('../../models');
 
-const removeUserFromGroup = async (groupId, userId) => {
+const deleteUserFromGroup = async (groupId, userId) => {
     try {
         const group = await Group.findById(groupId);
         if (!group) {
@@ -18,4 +18,4 @@ const removeUserFromGroup = async (groupId, userId) => {
     }
 };
 
-module.exports = removeUserFromGroup;
+module.exports = deleteUserFromGroup;
