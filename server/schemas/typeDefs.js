@@ -55,4 +55,20 @@ type Query {
     post(_id: ID!): Post
     interests: [Interest]
     interest(_id: ID!): Interest
+
+type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addGroup(groupName: String!, groupDescription: String!): Group
+    addInterest(interestText: String!): Interest
+    addPost(postText: String!): Post
+    addComment(postId: ID!, commentText: String!): Post
+    addInterestToUser(interestText: String!): User
+    addUsersToGroup(username: String!): Group
+    deleteGroup(groupName: String!): Group
+    deleteUser(username: String!): User
+    deleteInterest(interestText: String!): Interest
+    deletePost(postId: ID!): Post
+    deleteComment(postId: ID!, commentId: ID!): Post
+}
 }`
