@@ -1,29 +1,51 @@
-import { useState } from "react";
-import { Container, Typography, Button, TextField } from "@mui/material";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
+import { useState } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from './utils/Themes.js'
+import { Container } from "@mui/material";
+import Navbar from "./components/Navbar";
+// import HeroSection from "./components/HeroSection";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import HeroSection from "./components/HeroSection";
+
+
+const Body = styled.div`
+  background-color: ${({ theme }) => theme.bg};
+  width: 100%;
+  overflow-x: hidden;
+`
+
+const Wrapper = styled.div`
+  background: linear-gradient(38.73deg, rgba(204, 0, 187, 0.15) 0%, rgba(201, 32, 184, 0) 50%), linear-gradient(141.27deg, rgba(0, 70, 209, 0) 50%, rgba(0, 70, 209, 0.15) 100%);
+  width: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%,30% 98%, 0 100%);
+`
 
 function App() {
-  const [count, setCount] = useState(0);
-
+const [theme, setTheme] = useState("light");
+const themeToggler = () => {
+  theme === "light" ? setTheme("dark") : setTheme("light");
+}
   return (
-    <Container sx={{ bgcolor: "tomato", height: "100vh" }}>
-      <Typography variant="h1" component="div" gutterBottom>
-        Vite + React
-        <h1>Vite + React</h1>
-        <div className="card">
-          <Button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </Button>
-          <TextField>
-            Edit <code>src/App.jsx</code> and save to test HMR
-            <p className="read-the-docs">
-              Click on the Vite and React logos to learn more
-            </p>
-          </TextField>
-        </div>
-      </Typography>
-    </Container>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <Body>
+        <Router>
+          <Container maxWidth="lg">
+            <Navbar theme={theme} toggleTheme={themeToggler} />
+            <HeroSection />
+            <Wrapper>
+              {/* <HeroSection /> */}
+              <Contact />
+            </Wrapper>
+            <Footer />
+          </Container>
+        </Router>
+      </Body>
+    </ThemeProvider>
   );
 }
 
 export default App;
+
