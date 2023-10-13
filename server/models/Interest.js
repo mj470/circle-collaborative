@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const interestSchema = new Schema({
     interestName: {
@@ -11,7 +11,7 @@ const interestSchema = new Schema({
             ref: 'Group'
         }
     ],
-    });
+});
 
 const Interest = model('Interest', interestSchema);
 module.exports = Interest;

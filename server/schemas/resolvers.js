@@ -27,8 +27,21 @@ const resolvers = {
                 .populate('groups')
                 .populate('interests')
         },
+        users: async () => {
+            return await User.find()
+                .select('-__v -password')
+                .populate('posts')
+                .populate('groups')
+                .populate('interests')
+        },
         group: async (parent, { groupName }) => {
             return await Group.findOne({ groupName })
+                .populate('posts')
+                .populate('users')
+                .populate('interests')
+        },
+        groups: async () => {
+            return await Group.find()
                 .populate('posts')
                 .populate('users')
                 .populate('interests')
