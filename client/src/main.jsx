@@ -1,72 +1,60 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
-import App from './App';
+import App from './App.jsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// Import your pages
+import ErrorPage from './pages/Error';
+import Home from './pages/Home';
+import CircleGroupsPage from './pages/CircleGroups';
+import ChatPage from './pages/messages/Chat.jsx';
+import ProfilePage from './pages/Profile';
+import ContactPage from './pages/Contact';
+import AboutUsPage from './pages/AboutUs';
+import SignInPage from './pages/SignIn';
+import SignUpPage from './pages/Signup';
 
-import { createTheme, ThemeProvider } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-
-// import App from './App.jsx';
-// import Home from './pages/Home';
-// import Login from './pages/Login';
-// import Signup from './pages/Signup';
-// import Profile from './pages/Profile';
-// import Error from './pages/Error';
-
-
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1a1a1a',
-    },
-    secondary: {
-      main: '#1a1a1a',
-    },
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: '/groups',
+        element: <CircleGroupsPage />,
+      },
+      {
+        path: '/chat',
+        element: <ChatPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/contact',
+        element: <ContactPage />,
+      },
+      {
+        path: '/aboutus',
+        element: <AboutUsPage />,
+      },
+      {
+        path: '/signin',
+        element: <SignInPage />,
+      },
+      {
+        path: '/signup',
+        element: <SignUpPage />,
+      },
+    ],
   },
-  typography: {
-    fontFamily: 'Roboto',
-    h1: {
-      fontSize: '3rem',
-      fontWeight: 'bold',
-    },
-  },
-})
+]);
 
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element: <App />,
-//     error: <Error />,
-//     children: [
-//       {
-//         index: true,
-//         element: <Home />
-//       }, {
-//         path: '/login',
-//         element: <Login />
-//       }, {
-//         path: '/signup',
-//         element: <Signup />
-//       }, {
-//         path: '/me',
-//         element: <Profile />
-//       }, {
-//         path: '/',
-//         element: <Profile />
-//       }
-//     ]
-//   }
-// ])
-
+// Render the RouterProvider component
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      {/* <RouterProvider router={router}> */}
-        <CssBaseline />
-        <App />
-      {/* </RouterProvider> */}
-    </ThemeProvider>
-  </React.StrictMode>,
-)
+  <RouterProvider router={router} />
+);
