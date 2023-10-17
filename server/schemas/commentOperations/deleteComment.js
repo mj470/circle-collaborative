@@ -7,7 +7,9 @@ const deleteComment = async (parent, {postId, commentId}) => {
             { $pull: { comments: { _id: commentId } } },
             { new: true, runValidators: true }
         );
+      
         return post;
+
     } catch (error) {
         throw new Error('Error while removing comment: ' + error.message);
     }

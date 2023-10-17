@@ -37,7 +37,6 @@ const resolvers = {
         group: async (parent, { groupName }) => {
             return await Group.findOne({ groupName })
             .populate('users')
-
         },
         interests: async () => {
             return await Interest.find()

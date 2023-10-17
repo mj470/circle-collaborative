@@ -1,6 +1,7 @@
 const { Post, User } = require('../../models');
 
 const deletePost = async (parent,{postId}) => {
+
     try {
         const post = await Post.findOneAndRemove(
             { _id: postId },
