@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/groups',
+        path: '/circlegroups',
         element: <CircleGroupsPage />,
       },
       {
