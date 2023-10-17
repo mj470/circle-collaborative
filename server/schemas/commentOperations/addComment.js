@@ -9,6 +9,7 @@ const addComment = async (parent, { postId, commentText }, context) => {
             { new: true, runValidators: true }
         );
         return post;
+
     } catch (error) {
         throw new Error('Error while adding new group: ' + error.message);
     }
