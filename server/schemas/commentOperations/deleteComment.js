@@ -1,13 +1,13 @@
 const { Post } = require('../../models');
 
-const deleteComment = async (postId, commentId) => {
+const deleteComment = async (parent, {postId, commentId}) => {
     try {
-        const updatedPost = await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
             { _id: postId },
             { $pull: { comments: { _id: commentId } } },
             { new: true, runValidators: true }
         );
-        return updatedPost;
+        return post;
     } catch (error) {
         throw new Error('Error while removing comment: ' + error.message);
     }
