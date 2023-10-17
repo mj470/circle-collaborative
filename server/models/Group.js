@@ -16,10 +16,10 @@ const groupSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
-    interests: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Interest'
-    }],
+    // interests: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Interest'
+    // }],
 })
 
 const Group = model('Group', groupSchema);
