@@ -1,12 +1,12 @@
 const typeDefs = `
 type User {
     _id: ID
-    username: String!
-    email: String!
-    password: String!
-    firstName: String!
-    lastName: String!
-    post: [Post]
+    username: String
+    email: String
+    password: String
+    firstName: String
+    lastName: String
+    posts: [Post]
     groups: [Group]
     interests: [Interest]
 }
@@ -43,7 +43,6 @@ type Interest {
 
 type Auth {
     token: ID!
-    user: User
 }
 
 type Query {
@@ -60,15 +59,20 @@ type Query {
 }
 
 type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
     login(email: String!, password: String!): Auth
     addUserToGroup(userId: ID!): Group
     addInterestToUser(interestId: ID!): User
     addPost(postText: String!): Post
+    addInterest(interestName: String!): Interest
+    addGroup(groupName: String!, groupDescription: String): Group
+    addInterestToGroup(interestId: ID!): Group
     addComment(postId: ID!, commentText: String!): Post
     deleteUser(userId: ID!): User
     deleteInterestFromUser(interestId: String!): User
     deletePost(postId: ID!): Post
+    deleteInterest(interestId: ID!): Interest
+    deleteGroup(groupId: ID!): Group
     deleteComment(postId: ID!, commentId: ID!): Post
     editPost(postId: ID!, postText: String!): Post
     editComment(postId: ID!, commentId: ID!, commentText: String!): Post

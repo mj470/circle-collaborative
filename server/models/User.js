@@ -28,7 +28,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        post: [
+        posts: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Post'
@@ -47,10 +47,8 @@ const userSchema = new Schema(
             }
         ],
 
-    },
-    {
-        timestamps: true
-    })
+    }
+);
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {

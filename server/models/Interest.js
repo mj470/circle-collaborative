@@ -4,6 +4,7 @@ const interestSchema = new Schema({
     interestName: {
         type: String,
         required: true,
+        unique: true,
     },
     assocGroups: [
         {

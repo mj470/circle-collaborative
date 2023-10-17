@@ -4,7 +4,9 @@ const { addInterest, deleteInterest, addInterestToUser, addInterestToGroup, dele
 const { addPost, deletePost, editPost } = require('./postOperations')
 const { addComment, deleteComment } = require('./commentOperations')
 
-const { User, Group, Post } = require('../models');
+const { signToken } = require('../utils/auth');
+
+const { User, Group, Post, Interest } = require('../models');
 
 
 const resolvers = {
@@ -13,42 +15,41 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
-                    .populate('posts')
-                    .populate('groups')
-                    .populate('interests')
+
                 return userData;
             }
             throw new AuthenticationError('Not logged in');
         },
-        user: async (parent, { username }) => {
-            return await User.findOne({ username })
+        user: async (parent, { userId },) => {
+            return await User.findOne({ _userId: userId })
                 .select('-__v -password')
-                .populate('posts')
-                .populate('groups')
-                .populate('interests')
         },
         users: async () => {
             return await User.find()
                 .select('-__v -password')
-                .populate('posts')
-                .populate('groups')
-                .populate('interests')
         },
         group: async (parent, { groupName }) => {
             return await Group.findOne({ groupName })
-                .populate('posts')
-                .populate('users')
-                .populate('interests')
+
         },
-        groups: async () => {
+        interests: async () => {
+            return await Interest.find()
+        },
+        allGroups: async () => {
             return await Group.find()
-                .populate('posts')
-                .populate('users')
-                .populate('interests')
+        },
+        similarGroups: async (parent, { interestID }) => {
+            return await Group.find({ interests: interestID })
         },
         post: async (parent, { _id }) => {
             return await Post.findOne({ _id })
                 .populate('comments')
+        },
+        userPosts: async (parent, { username }) => {
+            return await Post.find({ postAuthor: username })
+        },
+        groupPosts: async (parent, { groupName }) => {
+            return await Post.find({ postGroup: groupName })
         },
     },
     Mutation: {
@@ -66,20 +67,20 @@ const resolvers = {
             }
 
             const token = signToken(user);
-            return { token, user };
+            return { token };
         },
         addUser: addUser,
-        addGroup: addGroup,
-        addInterest: addInterest,
         addPost: addPost,
         addComment: addComment,
         addInterestToUser: addInterestToUser,
+        addInterest: addInterest,
+        addGroup: addGroup,
         addInterestToGroup: addInterestToGroup,
         addUserToGroup: addUserToGroup,
-        deleteGroup: deleteGroup,
         deleteUser: deleteUser,
-        deleteInterest: deleteInterest,
         deletePost: deletePost,
+        deleteInterest: deleteInterest,
+        deleteGroup: deleteGroup,
         deleteComment: deleteComment,
         deleteInterestFromUser: deleteInterestFromUser,
         editPost: editPost,

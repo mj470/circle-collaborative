@@ -35,10 +35,7 @@ module.exports = {
       return req;
     },
   signToken: function ({ username, email, _id }) {
-    // if profile isDoctor = true
-    // if profile isAccounting = 
     const payload = { username, email, _id };
-
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
 };

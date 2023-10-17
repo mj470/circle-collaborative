@@ -1,12 +1,20 @@
-const { Interest } = require('../../models/Interest');
+const { Interest, User } = require('../../models');
 
-const deleteInterest = async (interestId) => {
+const deleteInterest = async (parent, {interestId}) => {
     try {
-        const interest = await Interest.findById(interestId);
+        const interest = await Interest.findOneAndDelete({_id: interestId});
         if (!interest) {
             throw new Error('Interest not found');
         }
-        await interest.remove();
+        // const users = await User.findOneAndUpdate(
+        //     {interests: interestId}, 
+        //     {$pull: {interests: interestId}}, 
+        //     {runValidators: true, new: true});
+
+        // if (!users) {
+        //     throw new Error('User not found');
+        // }
+
         return { message: 'Interest deleted successfully' };
     } catch (error) {
         throw new Error('Error while deleting interest: ' + error.message);
