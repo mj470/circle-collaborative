@@ -1,11 +1,11 @@
 const { Post } = require('../../models');
 
 
-const addComment = async (parent, {postId, commentText}, context) => {
+const addComment = async (parent, { postId, commentText }, context) => {
     try {
         const post = await Post.findOneAndUpdate(
             { _id: postId },
-            { $addToSet: {comments: {commentText, commentAuthor: context.user.username } }},
+            { $addToSet: { comments: { commentText, commentAuthor: context.user.username } } },
             { new: true, runValidators: true }
         );
         return post;
@@ -15,4 +15,4 @@ const addComment = async (parent, {postId, commentText}, context) => {
     }
 }
 
-module.exports = addComment
+module.exports = addComment 

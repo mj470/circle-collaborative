@@ -1,21 +1,32 @@
-const { Group } = require('../../models');
+const { Group, User } = require('../../models');
+const { AuthenticationError } = require('../../utils/auth');
 
-const addUserToGroup = async (groupId, userId) => {
-    try {
+const addUserToGroup = async (parent, { groupId, }, context) => {
+    if (context.user) {
+
         const group = await Group.findById(groupId);
+
         if (!group) {
-            throw new Error('Group not found');
+          throw new Error('Group not found');
         }
 
-        if (!group.users.includes(userId)) {
-            group.users.push(userId);
-            await group.save();
+        // Check if the user is already a member of the group (customize this logic)
+        if (group.users.includes(context.user._id)) {
+          throw new Error('User is already a member of the group');
         }
-        return group;
-    } catch (error) {
-        throw new Error('Error while adding user to group: ' + error.message);
+
+        // Add the user's ID to the group's "users" array
+        group.users.push(context.user._id);;
+
+        // Save the updated group
+        await group.save();
+
+        // Return the updated group
+        return group.populate('users');
     }
-};
+    throw AuthenticationError;
+    ('You need to be logged in!');
+}
 
 module.exports = addUserToGroup;
 

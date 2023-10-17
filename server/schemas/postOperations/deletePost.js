@@ -1,30 +1,33 @@
-const { Post, User } = require('../../models');
+const { Post, User, Group } = require('../../models');
+const { AuthenticationError } = require('../../utils/auth');
 
-const deletePost = async (parent,{postId}) => {
-
+const deletePost = async (parent, { postId, groupId }, context) => {
+    // Check if the user is authenticated
     try {
-        const post = await Post.findOneAndRemove(
-            { _id: postId },
-            { $pull: { posts: postId } },
-            { runValidators: true, new: true }
-        );
+        // Find the post by its unique ID
+        const post = await Post.findOneAndDelete({ _id: postId });
+
+        // Check if the post exists
         if (!post) {
             throw new Error('Post not found');
         }
 
-        const user = await User.findOneAndUpdate(
-            { posts: postId },
-            { $pull: { posts: postId } },
-            { runValidators: true, new: true }
+        // Check if the user owns the post (or has the appropriate permissions to delete)
+        if (post.postAuthor !== context.user.username) {
+            throw AuthenticationError
+        }
+
+        // Find the group where the post belongs (assuming you have a reference to the group in the Post model)
+        await Group.updateOne(
+            { _id: post.groupId },
+            { $pull: { posts: postId } }
         );
 
-        if(!user) {
-            throw new Error('User not found');
-        }
-        return { message: 'Post deleted successfully' };
+
+        return 'Post deleted successfully';
     } catch (error) {
-        throw new Error('Error while deleting post: ' + error.message);
+        throw Error('Error while deleting post: ' + error.message);
     }
-};
+}
 
 module.exports = deletePost;
