@@ -75,7 +75,6 @@ type Mutation {
     deleteGroup(groupId: ID!): Group
     deleteComment(postId: ID!, commentId: ID!): Post
     editPost(postId: ID!, postText: String!): Post
-    editComment(postId: ID!, commentId: ID!, commentText: String!): Post
     deleteUserFromGroup(groupId: ID!): Group
 }
 `;

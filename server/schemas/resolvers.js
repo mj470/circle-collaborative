@@ -23,14 +23,20 @@ const resolvers = {
         user: async (parent, { userId },) => {
             return await User.findOne({ _userId: userId })
                 .select('-__v -password')
+                .populate('interests')
+                .populate('groups')
+                .populate('posts')
         },
         users: async () => {
             return await User.find()
                 .select('-__v -password')
+                .populate('interests')
+                .populate('groups')
+                .populate('posts')
         },
         group: async (parent, { groupName }) => {
             return await Group.findOne({ groupName })
-
+            .populate('users')
         },
         interests: async () => {
             return await Interest.find()
