@@ -1,12 +1,12 @@
-const { User } = require('../../models/User');
+const { Post, User } = require('../../models');
 
-const deleteUser = async (userId) => {
+const deleteUser = async (parent, {userId}, context) => {
     try {
-        const user = await User.findById(userId);
+        const user = await User.findOneAndDelete({ _id: userId});
         if (!user) {
             throw new Error('User not found');
         }
-        await user.remove();
+        await Post.deleteMany({ _id: { $in: user.posts } });
         return { message: 'User deleted successfully' };
     } catch (error) {
         throw new Error('Error while deleting user: ' + error.message);
