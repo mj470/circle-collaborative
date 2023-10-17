@@ -21,7 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { alpha, styled } from '@mui/material/styles';
 
-const pages = ['My Circles', 'Chat', 'Profile', 'Contact', 'About Us'];
+const pages = ['CircleGroups', 'Chat', 'Profile', 'Contact', 'AboutUs'];
 const settings = ['My Account', 'Settings'];
 
 // if (isSignedIn()) {
