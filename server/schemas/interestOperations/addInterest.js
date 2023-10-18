@@ -1,9 +1,9 @@
-const { Interest } = require('../../models/Interest');
+const { Interest } = require('../../models');
 
-const addInterest = async (interestData) => {
+const addInterest = async (parent, {interestName}) => {
     try {
-        const newInterest = new Interest(interestData);
-        return await newInterest.save();
+        const newInterest = await Interest.create({interestName});
+        return newInterest ;
     } catch (error) {
         throw new Error('Error while adding interest: ' + error.message);
     }

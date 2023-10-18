@@ -1,12 +1,11 @@
 const { Group } = require('../../models');
 
-const deleteGroup = async (groupId) => {
+const deleteGroup = async (parent, { groupId }) => {
     try {
-        const group = await Group.findById(groupId);
+        const group = await Group.findOneAndDelete({ _id: groupId });
         if (!group) {
             throw new Error('Group not found');
         }
-        await group.remove();
         return { message: 'Group deleted successfully' };
     } catch (error) {
         throw new Error('Error while deleting group: ' + error.message);

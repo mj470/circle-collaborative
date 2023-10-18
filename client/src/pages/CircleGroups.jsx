@@ -175,7 +175,7 @@ const cardData = [
   },
   {
     title: "Anime Lovers",
-    subheader: "created September 14, 2022",
+    subheader: "created October 10, 2023",
     description:
       "A community for anime lovers to discuss, discover, and share their favorite anime shows and movies. You better be a fan of sub, dub lover need not apply~",
     avatar: [
@@ -199,7 +199,7 @@ const cardData = [
   },
   {
     title: "Music for the Soul",
-    subheader: "created September 14, 2022",
+    subheader: "created May 30, 2023",
     description:
       "A community for music lovers to discuss, discover, and share their favorite music. *Must have at least 1000 hours of listening to music to join. No exceptions.",
     avatar: [

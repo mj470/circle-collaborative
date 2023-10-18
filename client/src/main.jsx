@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './pages/Error';
 import Home from './pages/Home';
 import CircleGroupsPage from './pages/CircleGroups';
-import ChatPage from './pages/messages/Chat.jsx';
 import ProfilePage from './pages/Profile';
 import ContactPage from './pages/Contact';
 import AboutUsPage from './pages/AboutUs';
@@ -25,10 +24,6 @@ const router = createBrowserRouter([
       {
         path: '/circlegroups',
         element: <CircleGroupsPage />,
-      },
-      {
-        path: '/chat',
-        element: <ChatPage />,
       },
       {
         path: '/profile',

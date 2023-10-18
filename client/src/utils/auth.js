@@ -24,9 +24,15 @@ class AuthService {
   }
 
   login(idToken) {
+    if (idToken) {
     localStorage.setItem('id_token', idToken);
     window.location.assign('/');
+  } else {
+    window.location.assign('/error');
+    console.error('No token provided');
+    }
   }
+
 
   logout() {
     localStorage.removeItem('id_token');

@@ -1,12 +1,10 @@
-const { User } = require('../../models/User');
+const { User } = require('../../models');
+const { signToken } = require('../../utils/auth');
 
-const addUser = async (userData) => {
-    try {
-        const newUser = new User(userData);
-        return await newUser.save();
-    } catch (error) {
-        throw new Error('Error while adding user: ' + error.message);
-    }
+const addUser = async (parent, { username, email, password }) => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
+        return { token, user };
 };
 
 module.exports = addUser;

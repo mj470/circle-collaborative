@@ -1,8 +1,10 @@
 const { addGroup, addUserToGroup, deleteGroup, deleteUserFromGroup } = require('./groupOperations')
 const { addUser, deleteUser } = require('./userOperations')
-const { addInterest, deleteInterest, addInterestToUser, addInterestToGroup, deleteInterestFromUser } = require('./interestOperations')
+// const { addInterest, deleteInterest, addInterestToUser, addInterestToGroup, deleteInterestFromUser } = require('./interestOperations')
 const { addPost, deletePost, editPost } = require('./postOperations')
 const { addComment, deleteComment } = require('./commentOperations')
+
+const { signToken } = require('../utils/auth');
 
 const { User, Group, Post } = require('../models');
 
@@ -13,43 +15,79 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
-                    .populate('posts')
-                    .populate('groups')
-                    .populate('interests')
+
                 return userData;
             }
             throw new AuthenticationError('Not logged in');
         },
-        user: async (parent, { username }) => {
-            return await User.findOne({ username })
+        user: async (parent, { userId },) => {
+            return await User.findOne({ _userId: userId })
                 .select('-__v -password')
-                .populate('posts')
-                .populate('groups')
-                .populate('interests')
+                // .populate('interests')
+                // .populate('groups')
+                // .populate('posts')
         },
         users: async () => {
             return await User.find()
                 .select('-__v -password')
-                .populate('posts')
-                .populate('groups')
-                .populate('interests')
+                // .populate('interests')
+                // .populate('groups')
+                // .populate('posts')
         },
-        group: async (parent, { groupName }) => {
-            return await Group.findOne({ groupName })
-                .populate('posts')
+        // userGroups: async () => {
+        //     const pipeline = [
+        //         {
+        //             $lookup: {
+        //                 from: 'users', // Name of the User collection
+        //                 localField: 'users', // Field in the Group collection
+        //                 foreignField: '_id', // Field in the User collection
+        //                 as: 'group_users', // Alias for the joined data
+        //             },
+        //         },
+        //         {
+        //             $project: {
+        //                 groupName: 1, // Include the group name in the result
+        //                 group_users: 1, // Include the group users
+        //             },
+        //         },
+        //     ];
+
+        //     try {
+        //         console.log(pipeline)
+        //         const result = await Group.aggregate(pipeline);
+        //         console.log(result)
+        //         return result;
+        //     } catch (error) {
+        //         throw new Error('Error fetching user groups');
+        //     }
+        // },
+        group: async (parent, { groupId }) => {
+            return await Group.findOne({ _id: groupId })
                 .populate('users')
-                .populate('interests')
+                .populate('posts')
         },
-        groups: async () => {
+        // interests: async () => {
+        //     return await Interest.find()
+        // },
+        allGroups: async () => {
             return await Group.find()
-                .populate('posts')
                 .populate('users')
-                .populate('interests')
+                .populate('posts')
         },
+        // similarGroups: async (parent, { interestID }) => {
+        //     return await Group.find({ interests: interestID })
+        //         .populate('users')
+        // },
         post: async (parent, { _id }) => {
             return await Post.findOne({ _id })
                 .populate('comments')
         },
+        // userPosts: async (parent, { username }) => {
+        //     return await Post.find({ postAuthor: username })
+        // },
+        // groupPosts: async (parent, { groupName }) => {
+        //     return await Post.find({ postGroup: groupName })
+        // },
     },
     Mutation: {
         login: async (parent, { email, password }) => {
@@ -69,19 +107,19 @@ const resolvers = {
             return { token, user };
         },
         addUser: addUser,
-        addGroup: addGroup,
-        addInterest: addInterest,
         addPost: addPost,
         addComment: addComment,
-        addInterestToUser: addInterestToUser,
-        addInterestToGroup: addInterestToGroup,
+        // addInterestToUser: addInterestToUser,
+        // addInterest: addInterest,
+        addGroup: addGroup,
+        // addInterestToGroup: addInterestToGroup,
         addUserToGroup: addUserToGroup,
-        deleteGroup: deleteGroup,
         deleteUser: deleteUser,
-        deleteInterest: deleteInterest,
         deletePost: deletePost,
+        // deleteInterest: deleteInterest,
+        deleteGroup: deleteGroup,
         deleteComment: deleteComment,
-        deleteInterestFromUser: deleteInterestFromUser,
+        // deleteInterestFromUser: deleteInterestFromUser,
         editPost: editPost,
         deleteUserFromGroup: deleteUserFromGroup,
         addUserToGroup: addUserToGroup,

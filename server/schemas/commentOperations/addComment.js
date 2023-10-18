@@ -1,17 +1,18 @@
 const { Post } = require('../../models');
 
 
-const addComment = async (postId, commentData) => {
+const addComment = async (parent, { postId, commentText }, context) => {
     try {
-        const updatedPost = await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
             { _id: postId },
-            { $addToSet: { comments: commentData } },
+            { $addToSet: { comments: { commentText, commentAuthor: context.user.username } } },
             { new: true, runValidators: true }
         );
-        return await updatedPost.save();
+        return post;
+
     } catch (error) {
         throw new Error('Error while adding new group: ' + error.message);
     }
 }
 
-module.exports = addComment
+module.exports = addComment 
