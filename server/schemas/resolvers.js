@@ -53,7 +53,6 @@ const resolvers = {
             return await Post.find()
                 .populate('comments')
                 .populate('group')
-
     },
 },
     Mutation: {

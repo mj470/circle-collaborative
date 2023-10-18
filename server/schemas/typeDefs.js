@@ -11,8 +11,15 @@ type Group {
     _id: ID
     groupName: String!
     groupDescription: String
+    image: String
     posts: [Post]
     members: [User]
+}
+
+type Membership {
+    _id: ID
+    user: User
+    group: Group
 }
 
 type Post {
@@ -54,6 +61,7 @@ type Query {
     post(postId: ID!): Post
     groupPosts(groupId: ID!): [Post]
     allPosts: [Post]
+    membership(userId: ID!, groupId: ID!): Membership
 }
 
 type Mutation {

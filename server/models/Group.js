@@ -8,6 +8,9 @@ const groupSchema = new Schema({
     groupDescription: {
         type: String,
     },
+    image: {
+        type: String,
+    },
     posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Post'
