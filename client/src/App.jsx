@@ -1,28 +1,40 @@
-import { useState } from "react";
-import { Container, Typography, Button, TextField } from "@mui/material";
-import "./App.css";
+import Nav from './components/Navbar';
+import Footer from './components/Footer';
+import { Outlet } from 'react-router-dom';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import Paper from '@mui/material/Paper';
+import Header from './components/Header';
+import { blue, orange } from '@mui/material/colors';
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: orange[800],
+    },
+    secondary: {
+      main: blue[700],
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <Container sx={{ bgcolor: "tomato", height: "100vh" }}>
-      <Typography variant="h1" component="div" gutterBottom>
-        Vite + React
-        <h1>Vite + React</h1>
-        <div className="card">
-          <Button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </Button>
-          <TextField>
-            Edit <code>src/App.jsx</code> and save to test HMR
-            <p className="read-the-docs">
-              Click on the Vite and React logos to learn more
-            </p>
-          </TextField>
-        </div>
-      </Typography>
-    </Container>
+    <ApolloProvider client={client}>
+    <ThemeProvider theme={theme}>
+      <Paper elevation={0} sx={{ height: '100vh' }}>
+      <Header />
+      <Nav />
+      <Outlet />
+      <Footer />
+      </Paper>
+    </ThemeProvider>
+    </ApolloProvider>
   );
 }
 

@@ -1,6 +1,6 @@
-const Post = require('../../models/Post');
+const { Post } = require('../../models');
 
-const removeComment = async (postId, commentId) => {
+const deleteComment = async (postId, commentId) => {
     try {
         const updatedPost = await Post.findOneAndUpdate(
             { _id: postId },
@@ -13,4 +13,4 @@ const removeComment = async (postId, commentId) => {
     }
 }
 
-model.exports = removeComment;
+module.exports = deleteComment;

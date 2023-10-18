@@ -1,9 +1,11 @@
-const { addGroup, addUserToGroup, deleteGroup, deleteUsersFromGroup } = require('./groupOperations')
-const { addUser, deleteUser, addInterestToUser, deleteInterestFromUser } = require('./userOperations')
-const { addInterest, deleteInterest } = require('./interestOperations')
-const { addPost, deletePost } = require('./postOperations')
+const { addGroup, addUserToGroup, deleteGroup, deleteUserFromGroup } = require('./groupOperations')
+const { addUser, deleteUser } = require('./userOperations')
+const { addInterest, deleteInterest, addInterestToUser, addInterestToGroup, deleteInterestFromUser } = require('./interestOperations')
+const { addPost, deletePost, editPost } = require('./postOperations')
 const { addComment, deleteComment } = require('./commentOperations')
-const Group = require('../models/Group')
+
+const { User, Group, Post } = require('../models');
+
 
 const resolvers = {
     Query: {
@@ -25,8 +27,21 @@ const resolvers = {
                 .populate('groups')
                 .populate('interests')
         },
+        users: async () => {
+            return await User.find()
+                .select('-__v -password')
+                .populate('posts')
+                .populate('groups')
+                .populate('interests')
+        },
         group: async (parent, { groupName }) => {
             return await Group.findOne({ groupName })
+                .populate('posts')
+                .populate('users')
+                .populate('interests')
+        },
+        groups: async () => {
+            return await Group.find()
                 .populate('posts')
                 .populate('users')
                 .populate('interests')
@@ -59,14 +74,16 @@ const resolvers = {
         addPost: addPost,
         addComment: addComment,
         addInterestToUser: addInterestToUser,
-        addUsersToGroup: addUsersToGroup,
+        addInterestToGroup: addInterestToGroup,
+        addUserToGroup: addUserToGroup,
         deleteGroup: deleteGroup,
         deleteUser: deleteUser,
         deleteInterest: deleteInterest,
         deletePost: deletePost,
         deleteComment: deleteComment,
         deleteInterestFromUser: deleteInterestFromUser,
-        deleteUsersFromGroup: deleteUsersFromGroup,
+        editPost: editPost,
+        deleteUserFromGroup: deleteUserFromGroup,
         addUserToGroup: addUserToGroup,
     }
 }
