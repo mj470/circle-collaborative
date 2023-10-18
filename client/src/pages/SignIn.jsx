@@ -2,19 +2,43 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Typography, Button, Grid } from '@mui/material';
 import AuthService from '../utils/auth';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const [formState, setFormState] = useState({ email: '', password: '' });
+  const [login, { error }] = useMutation(LOGIN_USER);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = 'your_jwt_token'; 
-    if (token) {
-      AuthService.login(token);
-      navigation('/'); // Redirect to the home page or any other desired page
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  // submit form
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formState);
+    try {
+      const { data } = await login({
+        variables: { ...formState },
+      });
+
+      AuthService.login(data.login.token);
+    } catch (e) {
+      console.error(e);
     }
+
+    // clear form values
+    setFormState({
+      email: '',
+      password: '',
+    });
   };
 
   return (
@@ -23,7 +47,7 @@ const SignIn = () => {
         <Typography variant="h4">Sign In</Typography>
       </Grid>
       <Grid item xs={12}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -33,8 +57,8 @@ const SignIn = () => {
             label="Email"
             name="email"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formState.email}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -46,8 +70,8 @@ const SignIn = () => {
             type="password"
             id="password"
             autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formState.password}
+            onChange={handleChange}
           />
           <Button
             type="submit"
@@ -60,8 +84,10 @@ const SignIn = () => {
       </Grid>
       <Grid item xs={12}>
       <Typography variant="body2" align="center" gutterBottom>
-          Dont have an account? <Button onClick={() => navigation('/signup')}>Sign up here</Button>
+          Dont have an account? <Button onClick={() => navigate('/signup')}>Sign up here</Button>
         </Typography>
+      {error && <Typography variant="h6">Sign Up Failed. Please try again.</Typography>}
+
       </Grid>
     </Grid>
   );

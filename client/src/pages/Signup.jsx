@@ -1,49 +1,64 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../utils/auth';
 import { TextField, Button, Typography, Grid } from '@mui/material';
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigation = useNavigate();
-  const [hobbies, setHobbies] = useState('');
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import AuthService from '../utils/auth';
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const Signup = () => {
+  const navigate = useNavigate();
+  const [formState, setFormState] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [addUser, { error }] = useMutation(ADD_USER);
 
-    const user = {
-      email,
-      password,
-      hobbies,
-    };
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    setFormState({
+      ...formState,
+      [name]: value,
     });
-
-    const data = await response.json();
-    console.log(data);
-
-    const token = 'your_jwt_token'; // Replace with your actual token
-
-    if (token) {
-      AuthService.login(token);
-      navigation('/signin'); // Use the navigation function to navigate
-    }
   };
 
-  return (
+  // submit form
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
+
+      AuthService.login(data.addUser.token);
+      navigate('/signin');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+    return (
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h4">Sign Up</Typography>
       </Grid>
       <Grid item xs={12}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            value={formState.username}
+            onChange={handleChange}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -53,8 +68,8 @@ const SignUp = () => {
             label="Email"
             name="email"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formState.email}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -66,26 +81,17 @@ const SignUp = () => {
             type="password"
             id="password"
             autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="hobbies"
-            label="Favorite Hobbies/Activities"
-            id="hobbies"
-            value={hobbies}
-            onChange={(e) => setHobbies(e.target.value)}
+            value={formState.password}
+            onChange={handleChange}
           />
           <Button type="submit" variant="contained" color="primary">
             Sign Up
           </Button>
+          {error && <Typography variant="h6">Sign Up Failed. Please try again.</Typography>}
         </form>
       </Grid>
     </Grid>
   );
 };
 
-export default SignUp;
+export default Signup;

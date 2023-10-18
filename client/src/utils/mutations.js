@@ -11,7 +11,6 @@ mutation addUser($username: String!, $email: String!, $password: String!) {
     }
   }
 }
-  }
 `;
 
 export const ADD_USER_TO_GROUP = gql`
