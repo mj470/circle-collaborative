@@ -1,10 +1,26 @@
 import { gql } from '@apollo/client';
 
+export const QUERY_ME = gql`
+query Me {
+  me {
+    _id
+    username
+    groups {
+      _id
+      groupName
+      groupDescription
+    }
+  }
+}
+`
 export const QUERY_USERS = gql`
 query users {
   users {
     _id
     username
+    groups {
+      _id
+      groupName
   }
 }
 `;
@@ -14,6 +30,10 @@ query singleUser($username: String!) {
   user(username: $username) {
     _id
     username
+    groups {
+      _id
+      groupName
+      groupDescription
   }
 }
 `;
@@ -25,6 +45,10 @@ query allGroups {
     groupName
     groupDescription
   }
+  members {
+    _id
+    username
+  }
 }
 `;
 
@@ -35,8 +59,8 @@ query singleGroup($groupId: ID!) {
     groupName
     groupDescription
     users {
-      username
       _id
+      username
     }
     posts {
       _id

@@ -14,24 +14,23 @@ mutation addUser($username: String!, $email: String!, $password: String!) {
 `;
 
 export const ADD_USER_TO_GROUP = gql`
-mutation addUserToGroup($groupId: ID!) {
+mutation AddUserToGroup($groupId: ID!) {
   addUserToGroup(groupId: $groupId) {
-    _id
-    groupName
-    groupDescription
-    users {
+    id
+    group {
       _id
-      username
+      groupName
+      groupDescription
+      members {
+        _id
+        username
+      }
     }
-    posts {
-      _id
-      postAuthor
-      postText
-      createdAt
-      comments {
-        commentAuthor
-        commentText
-        createdAt
+    user {
+      username
+      groups {
+        _id
+        groupName
       }
     }
   }
@@ -52,39 +51,58 @@ mutation login($email: String!, $password: String!) {
 `;
 
 export const REMOVE_USER = gql`
-mutation deleteUser($userId: ID!) {
-  deleteUser(userId: $userId) {
+mutation DeleteUser {
+  deleteUser {
     _id
-    email
     username
+    email
   }
 }
 `;
 
 export const ADD_POST = gql`
-mutation addPost($postText: String!, $groupId: ID!) {
+mutation AddPost($postText: String!, $groupId: ID!) {
   addPost(postText: $postText, groupId: $groupId) {
     _id
     postText
     postAuthor
     createdAt
+    group {
+      _id
+      groupName
+    }
     comments {
       _id
-      commentAuthor
-      commentText
       createdAt
+      commentText
+      commentAuthor
     }
   }
 }
 `;
 
 export const REMOVE_POST = gql`
-mutation deletePost($postId: ID!) {
+mutation DeletePost($postId: ID!) {
   deletePost(postId: $postId) {
     _id
-    postText
-    postAuthor
-    createdAt
+    groupName
+    groupDescription
+    posts {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+    members {
+      username
+      _id
+    }
   }
 }
 `
@@ -106,34 +124,42 @@ mutation editPost($postId: ID!, $postText: String!) {
 `
 
 export const ADD_COMMENT = gql`
-mutation addComment($postText: String!, $groupId: ID!) {
-  addPost(postText: $postText, groupId: $groupId) {
+mutation AddComment($postId: ID!, $commentText: String!) {
+  addComment(postId: $postId, commentText: $commentText) {
     _id
     postText
     postAuthor
     createdAt
+    group {
+      groupName
+      _id
+    }
     comments {
       _id
-      commentAuthor
       commentText
       createdAt
+      commentAuthor
     }
   }
 }
 `;
 
 export const REMOVE_COMMENT = gql`
-mutation deleteComment($postId: ID!, $commentId: ID!) {
+mutation DeleteComment($postId: ID!, $commentId: ID!) {
   deleteComment(postId: $postId, commentId: $commentId) {
     _id
-    createdAt
-    postAuthor
     postText
+    postAuthor
+    createdAt
     comments {
       _id
-      commentAuthor
       commentText
+      commentAuthor
       createdAt
+    }
+    group {
+      _id
+      groupName
     }
   }
 }
@@ -142,24 +168,19 @@ mutation deleteComment($postId: ID!, $commentId: ID!) {
 export const REMOVE_USER_FROM_GROUP = gql`
 mutation DeleteUserFromGroup($groupId: ID!) {
   deleteUserFromGroup(groupId: $groupId) {
-    _id
-    groupName
-    groupDescription
-    users {
+    id
+    user {
       _id
       username
     }
-    posts {
+    group {
       _id
-      comments {
-        createdAt
-        commentText
+      groupName
+      groupDescription
+      members {
+        username
         _id
-        commentAuthor
       }
-      createdAt
-      postAuthor
-      postText
     }
   }
 }
