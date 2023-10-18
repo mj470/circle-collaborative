@@ -20,7 +20,7 @@ import AuthService from '../utils/auth';
 import circleLogoImage from '../assets/images/circle-logo.png';
 import { styled, alpha } from '@mui/material/styles';
 
-const pages = ['CircleGroups', 'Chat', 'Profile', 'Contact', 'AboutUs'];
+const pages = ['CircleGroups', 'Profile', 'Contact', 'AboutUs'];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
