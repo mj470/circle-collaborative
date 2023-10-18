@@ -23,72 +23,39 @@ const resolvers = {
         user: async (parent, { userId },) => {
             return await User.findOne({ _userId: userId })
                 .select('-__v -password')
-                // .populate('interests')
-                // .populate('groups')
-                // .populate('posts')
+                 .populate('groups')
         },
         users: async () => {
             return await User.find()
                 .select('-__v -password')
-                // .populate('interests')
-                // .populate('groups')
-                // .populate('posts')
+                .populate('groups')
         },
-        // userGroups: async () => {
-        //     const pipeline = [
-        //         {
-        //             $lookup: {
-        //                 from: 'users', // Name of the User collection
-        //                 localField: 'users', // Field in the Group collection
-        //                 foreignField: '_id', // Field in the User collection
-        //                 as: 'group_users', // Alias for the joined data
-        //             },
-        //         },
-        //         {
-        //             $project: {
-        //                 groupName: 1, // Include the group name in the result
-        //                 group_users: 1, // Include the group users
-        //             },
-        //         },
-        //     ];
-
-        //     try {
-        //         console.log(pipeline)
-        //         const result = await Group.aggregate(pipeline);
-        //         console.log(result)
-        //         return result;
-        //     } catch (error) {
-        //         throw new Error('Error fetching user groups');
-        //     }
-        // },
         group: async (parent, { groupId }) => {
             return await Group.findOne({ _id: groupId })
-                .populate('users')
+                .populate('members')
                 .populate('posts')
         },
-        // interests: async () => {
-        //     return await Interest.find()
-        // },
         allGroups: async () => {
             return await Group.find()
-                .populate('users')
+                .populate('members')
                 .populate('posts')
         },
-        // similarGroups: async (parent, { interestID }) => {
-        //     return await Group.find({ interests: interestID })
-        //         .populate('users')
-        // },
         post: async (parent, { _id }) => {
             return await Post.findOne({ _id })
                 .populate('comments')
         },
-        // userPosts: async (parent, { username }) => {
-        //     return await Post.find({ postAuthor: username })
-        // },
-        // groupPosts: async (parent, { groupName }) => {
-        //     return await Post.find({ postGroup: groupName })
-        // },
+        groupPosts: async (parent, { groupId }) => {
+            return await Post.find({ group: groupId })
+                .populate('comments')
+                .populate('group')
+        },
+        allPosts: async () => {
+            return await Post.find()
+                .populate('comments')
+                .populate('group')
+
     },
+},
     Mutation: {
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });

@@ -19,34 +19,12 @@ const userSchema = new Schema(
             type: String,
             required: true
         },
-        // firstName: {
-        //     type: String,
-        //     required: true,
-        //     trim: true
-        // },
-        // lastName: {
-        //     type: String,
-        //     required: true,
-        // },
-        // posts: [
-        //     {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'Post'
-        //     }
-        // ],
-        // groups: [
-        //     {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'Group'
-        //     }
-        // ],
-        // interests: [
-        //     {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'Interest'
-        //     }
-        // ],
-
+        groups: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Group'
+            }
+        ],
     }
 );
 

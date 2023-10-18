@@ -1,32 +1,30 @@
-const { Group } = require('../../models');
+const { Group, Membership, User } = require('../../models');
 
-const deleteUserFromGroup = async (parent, {groupId}, context) => {
-    if (context.user) {
-
-        const group = await Group.findById(groupId);
-        console.log(group);
-        if (!group) {
-          throw new Error('Group not found');
-        }
-
-        // Check if the user is a member of the group
-        const userIndex = group.users.indexOf(context.user._id);
-
-        if (userIndex === -1) {
-          throw new Error('User is not a member of the group');
-        }
-
-        // Remove the user's ID from the group's "users" array
-        group.users.splice(userIndex, 1);
-
-        // Save the updated group
-        await group.save();
-
-        // Return the updated group
-        return group.populate('users');
+const deleteUserFromGroup = async (parent, { groupId }, context) => {
+  try {
+    if (!context.user) {
+      throw new Error('User not authenticated');
     }
-    throw AuthenticationError;
-    ('You need to be logged in!');
-}
+
+    const userId = context.user._id;
+
+    // Verify that the provided groupId is valid
+
+    // Remove the membership record
+    await Membership.findOneAndRemove({ user: userId, group: groupId });
+
+    // Remove the groupId from the user's groups and userId from the group's members
+    await User.findByIdAndUpdate(userId, { $pull: { groups: groupId } }).populate('groups');
+    await Group.findByIdAndUpdate(groupId, { $pull: { members: userId } }).populate('members');
+
+    const group = await Group.findById(groupId).populate('members');
+    return {
+      user: context.user,
+      group: group,
+    };
+  } catch (error) {
+    throw new Error('Error deleting user from group: ' + error.message);
+  }
+};
 
 module.exports = deleteUserFromGroup;

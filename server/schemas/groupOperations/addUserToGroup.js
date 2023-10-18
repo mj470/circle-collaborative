@@ -1,32 +1,41 @@
-const { Group, User } = require('../../models');
+const { Group, User, Membership } = require('../../models');
 const { AuthenticationError } = require('../../utils/auth');
 
-const addUserToGroup = async (parent, { groupId, }, context) => {
-    if (context.user) {
-
-        const group = await Group.findById(groupId);
-
-        if (!group) {
-          throw new Error('Group not found');
-        }
-
-        // Check if the user is already a member of the group (customize this logic)
-        if (group.users.includes(context.user._id)) {
-          throw new Error('User is already a member of the group');
-        }
-
-        // Add the user's ID to the group's "users" array
-        group.users.push(context.user._id);;
-
-        // Save the updated group
-        await group.save();
-
-        // Return the updated group
-        return group.populate('users');
+const addUserToGroup = async (parent, { userId, groupId }, context) => {
+  try {
+    if (!context.user) {
+      throw new Error('User not authenticated');
     }
-    throw AuthenticationError;
-    ('You need to be logged in!');
-}
+
+    // Get the user ID from the logged-in user in the context
+    const userId = context.user._id;
+
+    // Verify that the provided userId and groupId are valid
+
+    // Create a new Membership document
+    const membership = new Membership({
+      user: userId,
+      group: groupId,
+      // Other membership-related fields, if applicable
+    });
+
+    // Add the membership to the user's groups and the group's members
+    await membership.save();
+
+    // Update the User and Group models
+    await User.findByIdAndUpdate(userId, { $addToSet: { groups: groupId } });
+    await Group.findByIdAndUpdate(groupId, { $addToSet: { members: userId } });
+
+    const group = await Group.findById(groupId);
+    return {
+      id: membership._id,
+      user: context.user,
+      group: group,
+    };
+  } catch (error) {
+    throw new Error('Error adding user to group: ' + error.message);
+  }
+};
 
 module.exports = addUserToGroup;
 
