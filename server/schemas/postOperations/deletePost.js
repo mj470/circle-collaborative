@@ -1,33 +1,37 @@
-const { Post, User, Group } = require('../../models');
-const { AuthenticationError } = require('../../utils/auth');
+const { Post, Group } = require('../../models');
 
-const deletePost = async (parent, { postId, groupId }, context) => {
-    // Check if the user is authenticated
-    try {
-        // Find the post by its unique ID
-        const post = await Post.findOneAndDelete({ _id: postId });
-
-        // Check if the post exists
-        if (!post) {
-            throw new Error('Post not found');
-        }
-
-        // Check if the user owns the post (or has the appropriate permissions to delete)
-        if (post.postAuthor !== context.user.username) {
-            throw AuthenticationError
-        }
-
-        // Find the group where the post belongs (assuming you have a reference to the group in the Post model)
-        await Group.updateOne(
-            { _id: post.groupId },
-            { $pull: { posts: postId } }
-        );
-
-
-        return 'Post deleted successfully';
-    } catch (error) {
-        throw Error('Error while deleting post: ' + error.message);
+const deletePost = async (parent, { postId }, context) => {
+  try {
+    if (!context.user) {
+      throw new Error('User not authenticated');
     }
-}
+
+    // Find the post by ID
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    // Check if the authenticated user is the author of the post (or implement authorization logic as needed)
+    if (post.postAuthor !== context.user.username) {
+      throw new Error('User is not authorized to delete this post');
+    }
+
+    // Get the group associated with the post
+    const groupId = post.group;
+
+    // Remove the post ID from the group's list of posts
+    await Group.findByIdAndUpdate(groupId, { $pull: { posts: postId } });
+
+    await Post.findByIdAndDelete(postId);
+
+    // Return the updated group
+    const group = await Group.findById(groupId).populate('posts');
+    return group;
+  } catch (error) {
+    throw new Error('Error deleting post: ' + error.message);
+  }
+};
 
 module.exports = deletePost;

@@ -1,16 +1,32 @@
-const { Post, User } = require('../../models');
+const { Post, User, Group, Membership } = require('../../models');
 
 const deleteUser = async (parent, args, context) => {
     try {
-        const user = await User.findOneAndDelete({ _id: args.userId});
-        if (!user) {
-            throw new Error('User not found');
-        }
-        // await Post.deleteMany({ _id: { $in: user.posts } });
-        return { message: 'User deleted successfully' };
-    } catch (error) {
-        throw new Error('Error while deleting user: ' + error.message);
+      if (!context.user) {
+        throw new Error('User not authenticated');
+      }
+  
+    // Find and remove the user from groups
+    const userGroups = await Group.find({ members: context.user._id });
+
+    for (const group of userGroups) {
+      // Remove the user from the group's members
+      await Group.findByIdAndUpdate(group._id, { $pull: { members: context.user._id } });
+
+      // Optionally, delete posts created by the user in the group
+      if (group.posts && group.posts.length > 0) {
+        // Delete user's posts in the group
+        await Post.deleteMany({ _id: { $in: group.posts }, postAuthor: context.user.username });
+      }
     }
+
+    // Delete the user
+    await User.findByIdAndDelete(context.user._id);
+
+    return true; // Indicate successful deletion
+  } catch (error) {
+    throw new Error('Error deleting user: ' + error.message);
+  }
 };
 
 module.exports = deleteUser;

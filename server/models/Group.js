@@ -12,14 +12,10 @@ const groupSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Post'
     }],
-    users: [{
+    members: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }],
-    // interests: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Interest'
-    // }],
+    }]
 })
 
 const Group = model('Group', groupSchema);

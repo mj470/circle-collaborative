@@ -4,7 +4,7 @@ type User {
     username: String
     email: String
     password: String
-
+    groups: [Group]
 }
 
 type Group {
@@ -12,8 +12,7 @@ type Group {
     groupName: String!
     groupDescription: String
     posts: [Post]
-    users: [User]
-
+    members: [User]
 }
 
 type Post {
@@ -22,6 +21,7 @@ type Post {
     postAuthor: String
     createdAt: String
     comments: [Comment]
+    group: Group
 }
 
 type Comment {
@@ -29,6 +29,12 @@ type Comment {
     commentText: String
     commentAuthor: String
     createdAt: String
+}
+
+type Membership {
+    id: ID
+    user: User
+    group: Group
 }
 
 
@@ -43,25 +49,27 @@ type Query {
     user(username: String!): User
     allGroups: [Group]
     group(groupId: ID!): Group
-#    userPosts(username: String): [Post]
-#    groupPosts(groupName: String): [Post]
+    getUserByID(userId: ID!): User
+    getGroupByID(groupId: ID!): Group
     post(postId: ID!): Post
+    groupPosts(groupId: ID!): [Post]
+    allPosts: [Post]
 }
 
 type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addUserToGroup(groupId: ID!): Group
+    addUserToGroup(groupId: ID!): Membership
     addPost(postText: String!, groupId: ID!): Post
     addGroup(groupName: String!, groupDescription: String): Group
     addComment(postId: ID!, commentText: String!): Post
-    deleteUser(userId: ID!): User
+    deleteUser : User
     deleteInterestFromUser(interestId: String!): User
-    deletePost(postId: ID!): Post
+    deletePost(postId: ID!): Group
     deleteGroup(groupId: ID!): Group
     deleteComment(postId: ID!, commentId: ID!): Post
     editPost(postId: ID!, postText: String!): Post
-    deleteUserFromGroup(groupId: ID!): Group
+    deleteUserFromGroup(groupId: ID!): Membership
 }
 `;
 
