@@ -22,9 +22,9 @@ const addPost = async (parent, { groupId, postText }, context) => {
     // Save the new post to the database
     await post.save();
 
-    await Group.findByIdAndUpdate(groupId, { $push: { posts:post } }, { new: true });
+    await Group.findByIdAndUpdate(groupId, { $push: { posts:post } }, { new: true }).populate('posts');
 
-    return post;
+    return post.populate('group');
   } catch (error) {
     throw new Error('Error adding post to group: ' + error.message);
   }
