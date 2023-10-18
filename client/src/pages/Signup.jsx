@@ -1,100 +1,91 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { ADD_PROFILE } from '../utils/mutations';
-import Auth from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
+import AuthService from '../utils/auth';
+import { TextField, Button, Typography, Grid } from '@mui/material';
 
-const Signup = () => {
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [addProfile, { error, data }] = useMutation(ADD_PROFILE);
+const SignUp = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigate();
+  const [hobbies, setHobbies] = useState('');
 
-  // update state based on form input changes
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    setFormState({
-      ...formState,
-      [name]: value,
+    const user = {
+      email,
+      password,
+      hobbies,
+    };
+
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-  };
 
-  // submit form
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    console.log(formState);
+    const data = await response.json();
+    console.log(data);
 
-    try {
-      const { data } = await addProfile({
-        variables: { ...formState },
-      });
+    const token = 'your_jwt_token'; // Replace with your actual token
 
-      Auth.login(data.addProfile.token);
-    } catch (e) {
-      console.error(e);
+    if (token) {
+      AuthService.login(token);
+      navigation('/signin'); // Use the navigation function to navigate
     }
   };
 
   return (
-    <main className="flex-row justify-center mb-4">
-      <div className="col-12 col-lg-10">
-        <div className="card">
-          <h4 className="card-header bg-dark text-light p-2">Sign Up</h4>
-          <div className="card-body">
-            {data ? (
-              <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
-              </p>
-            ) : (
-              <form onSubmit={handleFormSubmit}>
-                <input
-                  className="form-input"
-                  placeholder="Your username"
-                  name="name"
-                  type="text"
-                  value={formState.name}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input"
-                  placeholder="Your email"
-                  name="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input"
-                  placeholder="******"
-                  name="password"
-                  type="password"
-                  value={formState.password}
-                  onChange={handleChange}
-                />
-                <button
-                  className="btn btn-block btn-info"
-                  style={{ cursor: 'pointer' }}
-                  type="submit"
-                >
-                  Submit
-                </button>
-              </form>
-            )}
-
-            {error && (
-              <div className="my-3 p-3 bg-danger text-white">
-                {error.message}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </main>
+    <Grid container spacing={3} justifyContent="center">
+      <Grid item xs={12}>
+        <Typography variant="h4">Sign Up</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            name="hobbies"
+            label="Favorite Hobbies/Activities"
+            id="hobbies"
+            value={hobbies}
+            onChange={(e) => setHobbies(e.target.value)}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Sign Up
+          </Button>
+        </form>
+      </Grid>
+    </Grid>
   );
 };
 
-export default Signup;
+export default SignUp;

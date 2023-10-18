@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Typography, Button, Grid } from '@mui/material';
+import AuthService from '../utils/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle sign in logic here
+    const token = 'your_jwt_token'; 
+    if (token) {
+      AuthService.login(token);
+      navigation('/'); // Redirect to the home page or any other desired page
+    }
   };
 
   return (
-    <Grid container spacing={3} justify="center">
+    <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h4">Sign In</Typography>
       </Grid>
@@ -56,8 +59,8 @@ const SignIn = () => {
         </form>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="body2" align="center" gutterBottom>
-          Dont have an account? <Link to="/signup">Sign up here</Link>
+      <Typography variant="body2" align="center" gutterBottom>
+          Dont have an account? <Button onClick={() => navigation('/signup')}>Sign up here</Button>
         </Typography>
       </Grid>
     </Grid>
