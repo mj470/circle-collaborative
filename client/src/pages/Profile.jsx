@@ -1,53 +1,52 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { QUERY_SINGLE_PROFILE, QUERY_ME } from '../utils/queries';
-import Auth from '../utils/auth';
+import { QUERY_SINGLE_USER } from '../utils/queries';
+import AuthService from '../utils/auth';
+import { CircularProgress, Paper, Typography } from '@mui/material';
 
 const Profile = () => {
-  const { profileId } = useParams();
-  const navigate = useNavigate();
+  const { userId } = useParams();
+  const navigate = Navigate();
 
-  const { loading, data } = useQuery(profileId ? QUERY_SINGLE_PROFILE : QUERY_ME, {
-    variables: { profileId: profileId },
+  const { loading, data } = useQuery(userId ? QUERY_SINGLE_USER : {
+    variables: { userId: userId },
   });
 
-  const profile = data?.me || data?.profile || {};
+  const user = data?.me || data?.user || {};
 
-  const loggedInUserId = Auth.getProfile()?.data._id;
+  const loggedInUserId = AuthService.getUser()?.data._id;
 
-  if (Auth.loggedIn() && loggedInUserId === profileId) {
-    navigate.push('/');
+  if (AuthService.loggedIn() && loggedInUserId === userId) {
+    navigate('/');
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
   }
 
-  if (!profile?.name) {
+  if (!user?.name) {
     return (
-      <h4>
-        You need to be logged in to see your profile page. Use the navigation
-        links above to sign up or log in!
-      </h4>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Typography variant="h4">
+          You need to be logged in to see your profile page. Use the navigation links above to sign up or log in!
+        </Typography>
+      </div>
     );
   }
 
   return (
     <div>
-      <h2 className="card-header">
-        {profileId ? `${profile.name}'s` : 'Your'} friends have endorsed these skills...
-      </h2>
+      <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
+        {userId ? `${user.name}'s` : 'Your'} friends have endorsed these skills...
+      </Typography>
 
-      {/* {profile.circle?.length > 0 && (
-        // <CircleList
-        //   skills={profile.skills}
-        //   isLoggedInUser={!profileId && true}
-        // />
-      )} */}
-
-      <div className="my-4 p-4" style={{ border: '1px dotted #1a1a1a' }}>
-
-      </div>
+      <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
+        {/* Your content */}
+      </Paper>
     </div>
   );
 };
