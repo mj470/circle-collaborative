@@ -11,6 +11,7 @@ import AboutUsPage from './pages/AboutUs';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/Signup';
 import GroupPage from './pages/Group';
+import PostPage from './pages/Post';
 import './main.css'
 
 
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: '/CircleGroups/:groupId',
         element: <GroupPage />,
+      },
+      {
+        path: '/CircleGroups/:groupId/:postId',
+        element: <PostPage />,
       }
     ],
   },
