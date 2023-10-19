@@ -1,102 +1,67 @@
-# React + Vite
+# Project: Circle Social Media App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Screenshots
 
-### Project Link:
+![Website Screenshots](./public/portfolio1.png)
+![Website Screenshots](./public/portfolio2.png)
+![Website Screenshots](./public/portfolio3.png)
 
 ## Table of Contents
-- [About The Project](#about-the-project)
-- [Built With](#built-with)
+- [Description](#description)
+- [Features](#features)
+- [TechnologiesUsed](#technologies-used)
 - [Installation](#installation)
-- [Usage](#usage)
+- [FutureDevelopment](#future-development)
 - [Contributors](#contributors)
-- [License](#license)
 
-## User Story
-**A** CMS-style website where users can create projects and claim projects as a developer.
+## Description 
+We imagined an idea of creating a space where future developers like us, could get together and share tech related content. After we brainstormed about where it could go, we expanded the idea to take the place of a social network where users could connect through a variety of shared interests and hobbies, find online communities to interact with.
 
-**AS** a developer **OR** someone who needs web development services
-
-**I WANT** to post or claim a project to work on
-
-**SO THAT** I can get paid for my in-demand skills or buy services to build out my website
-
-**WHEN** I first load the website
-
-**THEN** I can view all open projects as cards
-
-**WHEN** I click on a project card
-
-**THEN** I can view the project and claim it as a developer
-
-**WHEN** I claim a project as a developer
-
-**THEN** it appears on my profile page as 'Working On' (Claimed as developer)
-
-**WHEN** I create a project
-
-**THEN** it appears on my profile as 'My Open Projects' (As owner)
-
-**WHEN** I complete a project
-
-**THEN** it moves to the 'Completed Projects' section of my profile page (As Owner and Developer)
-
-**WHEN** I click Cancel Project
-
-**THEN** it is deleted from the database
-
-**WHEN** a developer claims a project (Post MVP)
-
-**THEN** the owner of the project is notified of the developer who claimed it (Post MVP)
-
-**WHEN** I confirm a developer to start my project (Post MVP)
-
-**THEN** I am directed to a payment portal to confirm my payment (Post MVP)
-
-## About Our Project
+Circle is a social media platform where users can create and join “circles” as a means of interacting with people that have similar interests. We believe our project takes inspiration from the likes of Reddit’s subbreddits with how groups are made and interact with each other as well as the look of sites like Twitter, Facebook, and Pintrest for a visually appealing user interface.
 
 
-### Built With
+## Features
+This application is fully responsive and mobile friendly. It has the functionality for a user to login or signup and view their profile page. The profile page populates with the username and the groups associated with that user. A logged in user can join groups to see content as well as create new "circles" for other users to join. Groups or Circle Groups are identified by an image, a unique name, and a short description. All Circle groups can be seen on the Circle Groups page. The navbar also has links to contact us as well as an about us page from the developers of the application. The navbar is avalible on every page and can link to any of the other pages. The navbar also allows a user to logout from any page. 
 
-* [![React.js]][React-url]
-* [![GitHub]][GitHub-url]
-* [![JavaScript]][JavaScript-url]
-* [![VSCode]][VSCode-url]
-* [![NPM]][NPM-url]
-* [![MongoDB]][MongoDB-url]
-* [![GraphQL]][GraphQL-url]
-* [![Express.js]][Express-url]
-* [![Node.js]][Node.js-url]
-* [![Heroku]][Heroku-url]
+Pages:
+-Home page with login/logout/signup fields
+-Profile page includes username and associated circle groups
+-Circle Groups page lists all avaliable groups and a field for logged in users to create new groups
+-Contact Us page for user feedback
+-About Us page about the developers
+-Navbar that loads on everypage
 
-### Installation
+## Technologies Used
+-Node.js
+-Express
+-GraphQL
+-MongoDB
+-React
+-Material UI
+-Appollo
 
-1. Clone the repo
-   ```sh
-   git clone 
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Enjoy Project!
+## Installation 
+[Heroku]https://circle-collaborative-37d794c2b6b2.herokuapp.com/CircleGroups 
+[GitHub]https://github.com/mj470/circle-collaborative
 
-## Usage
- 
+
+## Future Development
+
+-Chat: We have built a chat feature and would like to see it fully integrated in the future.
+ ![Chat Bubbles](image_480.png)
+
+-Reactions: We would like to add a range of reaction possibilities for posts
+
+-Post Content: We would like users to be able to post multi media content in their circle groups.
 
 
 ## Contributors
 
-Maren Christensen-
-Jake Lipscomb-
-Catherine Nguyen-
-Robbin Collins Jr-
-
-
-## License
+Maren Christensen-https://github.com/mj470
+Jake Lipscomb-https://github.com/jakelipscomb
+Catherine Nguyen-https://github.com/cmdnguyen
+Robbin Collins Jr-https://github.com/robbi19
 
