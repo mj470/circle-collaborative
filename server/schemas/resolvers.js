@@ -41,8 +41,8 @@ const resolvers = {
                 .populate('members')
                 .populate('posts')
         },
-        post: async (parent, { _id }) => {
-            return await Post.findOne({ _id })
+        post: async (parent, { postId }) => {
+            return await Post.findOne({ _id: postId })
                 .populate('comments')
         },
         groupPosts: async (parent, { groupId }) => {
