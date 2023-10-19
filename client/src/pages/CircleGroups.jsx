@@ -15,7 +15,6 @@ import {
   Avatar,
   IconButton,
   TextField,
-  styled,
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -23,6 +22,7 @@ import { ADD_GROUP } from "../utils/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERY_GROUPS } from "../utils/queries";
 import { useTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 import Auth from "../utils/auth";
 
@@ -134,6 +134,10 @@ export default function Projects() {
     });
   };
 
+  const handleMoreVertClick = () => {
+    window.location.href = `/CircleGroups/${card._id}`;
+  };
+  
   const theme = useTheme();
 
   return (
@@ -218,7 +222,6 @@ export default function Projects() {
                 m: 2,
                 background: theme.palette.secondary.main,
                 borderRadius: "10px",
-                m: 1,
                 boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
               }}
             >
@@ -230,9 +233,11 @@ export default function Projects() {
                     </Avatar>
                   }
                   action={
+                    <Link to={`/CircleGroups/${card._id}`} onClick={handleMoreVertClick}>
                     <IconButton aria-label="settings">
                       <MoreVertIcon />
                     </IconButton>
+                    </Link>
                   }
                   title={card.groupName}
                 />
