@@ -29,7 +29,16 @@ const Profile = () => {
     );
   }
 
-  if (data) {
+  if (!data) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Typography variant="h4">
+          You need to be logged in to see your profile page. Use the navigation links above to sign up or log in!
+        </Typography>
+      </div>
+    );
+  };
+
     return (
       <Box
         sx={{
@@ -76,5 +85,5 @@ const Profile = () => {
       </Box>
     );
   }
-};
+
   export default Profile;
