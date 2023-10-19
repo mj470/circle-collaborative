@@ -1,25 +1,29 @@
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { QUERY_SINGLE_USER } from '../utils/queries';
+import { QUERY_SINGLE_USER, QUERY_ME } from '../utils/queries';
 import AuthService from '../utils/auth';
 import { CircularProgress, Paper, Typography } from '@mui/material';
 
 const Profile = () => {
-  const { userId } = useParams();
-  const navigate = Navigate();
+  const { username } = useParams();
 
-  const { loading, data } = useQuery(userId ? QUERY_SINGLE_USER : {
-    variables: { userId: userId },
+  const { loading, data } = useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, {
+    variables: { username: username },
   });
+
+  console.log('data', data)
+  console.log('username', username)
 
   const user = data?.me || data?.user || {};
 
-  const loggedInUserId = AuthService.getUser()?.data._id;
+  const loggedInUser = AuthService.getUser()?.data;
 
-  if (AuthService.loggedIn() && loggedInUserId === userId) {
-    navigate('/');
+  if (AuthService.loggedIn() && loggedInUser.username === username) {
+    redirect('/');
   }
-
+  console.log("logged in user:", loggedInUser)
+  console.log("logged in user groups:", loggedInUser.groups)
+  console.log('user', user)
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -28,25 +32,42 @@ const Profile = () => {
     );
   }
 
-  if (!user?.name) {
+  if (!data) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Typography variant="h4">
-          You need to be logged in to see your profile page. Use the navigation links above to sign up or log in!
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <Typography variant="h4">
+            Welcome to your profile page, {loggedInUser.username}!
+          </Typography>
+        </div>
+        <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
+          {username ? `${user.username}'s` : 'Your'} friends have endorsed these skills...
         </Typography>
+
+        <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
+          <Typography>
+            {loggedInUser.username}s Groups
+          </Typography>
+          {loggedInUser.groups && Array.isArray(loggedInUser.groups) && loggedInUser.groups.length > 0 ? (
+            loggedInUser.groups.map((group) => (
+              <div key={group._id}>
+                <Typography variant="h6">{group.groupName}</Typography>
+                <Typography>{group.groupDescription}</Typography>
+              </div>
+            ))
+          ) : (
+            <Typography>No groups found for {loggedInUser.username}</Typography>
+          )}
+        </Paper>
       </div>
     );
   }
 
   return (
-    <div>
-      <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
-        {userId ? `${user.name}'s` : 'Your'} friends have endorsed these skills...
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Typography variant="h4">
+        You need to be logged in to see your profile page. Use the navigation links above to sign up or log in!
       </Typography>
-
-      <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
-        {/* Your content */}
-      </Paper>
     </div>
   );
 };
