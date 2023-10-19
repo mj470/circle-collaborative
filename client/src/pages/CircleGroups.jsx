@@ -18,11 +18,12 @@ import {
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { ADD_GROUP } from "../utils/mutations";
+import { ADD_GROUP, ADD_USER_TO_GROUP } from "../utils/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERY_GROUPS } from "../utils/queries";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useParams }  from "react-router-dom";
 
 import Auth from "../utils/auth";
 
@@ -36,8 +37,6 @@ const swiperSlides = [
     title: "BootCamp Grads",
     description:
       "A community of bootcamp graduates who are looking for their first job in the tech industry. Share your experiences and tips here.",
-    githubLink: "",
-    demoLink: "",
   },
   {
     key: 2,
@@ -46,8 +45,6 @@ const swiperSlides = [
     title: "Tech Titans Unite",
     description:
       "A community of tech enthusiasts sharing knowledge and innovations. *Must have at least a RTX 3090 or better to join. No exceptions.",
-    githubLink: "",
-    demoLink: "",
   },
   {
     key: 3,
@@ -56,8 +53,6 @@ const swiperSlides = [
     title: "Adventure Seekers Club",
     description:
       "For those who crave thrill and love exploring the great outdoors. Share your adventures here.",
-    githubLink: "",
-    demoLink: "",
   },
   {
     key: 4,
@@ -66,8 +61,6 @@ const swiperSlides = [
     title: "The Fellowship of the Onion Ring",
     description:
       "A place for food lovers to discuss, discover, and share culinary delights from around the world.",
-    githubLink: "",
-    demoLink: "",
   },
   {
     key: 5,
@@ -76,8 +69,6 @@ const swiperSlides = [
     title: "Dead Movie Buffs Society",
     description:
       "Lights, camera, action! A community for film aficionados to discuss niche, hidden gems in movies and cinema.",
-    githubLink: "",
-    demoLink: "",
   },
   {
     key: 6,
@@ -86,8 +77,6 @@ const swiperSlides = [
     title: "Itsumi Mario",
     description:
       "A community for gamers to discuss the latest and greatest in the gaming industry. *Must have at least 1000 hours in Mario Kart to join. No exceptions.",
-    githubLink: "",
-    demoLink: "",
   },
 
   // Add more objects for additional slides
@@ -99,11 +88,15 @@ export default function Projects() {
     groupDescription: "",
     image: "",
   });
+  const { groupId } = useParams();
   const [addGroup, { error }] = useMutation(ADD_GROUP);
   const { loading, data } = useQuery(QUERY_GROUPS, {
     pollInterval: 200,
   });
 
+  const [addUserToGroup] = useMutation(ADD_USER_TO_GROUP, {
+    variables: { groupId },
+  });
   const cardData = data?.allGroups || [];
 
   const handleChange = (event) => {
@@ -113,10 +106,7 @@ export default function Projects() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const token = Auth.loggedIn() ? Auth.getToken() : null;
-    if (!token) {
-      return false;
-    }
+    tokenCheck();
     try {
       console.log(formData);
       const { data } = addGroup({
@@ -134,10 +124,30 @@ export default function Projects() {
     });
   };
 
+  const handleJoinGroup = (event) => {
+    event.preventDefault();
+    tokenCheck();
+    try {
+      const { data } = addUserToGroup({
+        variables: { groupId },
+      });
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleMoreVertClick = () => {
     window.location.href = `/CircleGroups/${card._id}`;
   };
-  
+
+  const tokenCheck = () => { 
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+    if (!token) {
+      return false;
+    }
+  };
+
   const theme = useTheme();
 
   return (
@@ -156,9 +166,9 @@ export default function Projects() {
           autoplay={{ delay: 3000 }}
           className="your-swiper-class"
         >
-          {swiperSlides.map((slide) => (
+          {cardData.map((card) => (
             <SwiperSlide
-              key={slide.key}
+              key={card.key}
               className="swiper-slide"
               sx={{
                 display: "flex",
@@ -173,24 +183,26 @@ export default function Projects() {
               <Card sx={{ maxWidth: "100vh", m: 5, mx: "auto" }}>
                 <CardMedia
                   sx={{ height: 400 }}
-                  image={slide.image}
-                  title={slide.title}
+                  image={card.image}
+                  title={card.title}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {slide.title}
+                    {card.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {slide.description}
+                    {card.description}
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" href={slide.githubLink}>
-                    Add to Favorites
+                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
+                  <Button size="small">
+                    Join Group
                   </Button>
-                  <Button size="small" href={slide.demoLink}>
-                    Share
-                  </Button>
+                  </Link>
+                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
+                    <Button size="small">Add Post</Button>
+                  </Link>
                 </CardActions>
               </Card>
             </SwiperSlide>
@@ -261,7 +273,6 @@ export default function Projects() {
               m: 2,
               background: "white",
               borderRadius: "10px",
-              m: 1,
               boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
             }}
           >
