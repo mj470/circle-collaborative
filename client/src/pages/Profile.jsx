@@ -12,11 +12,12 @@ const Profile = () => {
   });
 
   console.log('data', data)
-  console.log('username', username)
+  console.log('username', useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, { variables: { username: username } }))
 
   const user = data?.me || data?.user || {};
 
-  const loggedInUser = AuthService.getUser()?.data;
+  const loggedInUser = AuthService.getUser(username)?.data;
+  console.log("AuthService", AuthService.getUser())
 
   if (AuthService.loggedIn() && loggedInUser.username === username) {
     redirect('/');
@@ -32,37 +33,7 @@ const Profile = () => {
     );
   }
 
-  if (!data) {
-    return (
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-          <Typography variant="h4">
-            Welcome to your profile page, {loggedInUser.username}!
-          </Typography>
-        </div>
-        <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
-          {username ? `${user.username}'s` : 'Your'} friends have endorsed these skills...
-        </Typography>
-
-        <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
-          <Typography>
-            {loggedInUser.username}s Groups
-          </Typography>
-          {loggedInUser.groups && Array.isArray(loggedInUser.groups) && loggedInUser.groups.length > 0 ? (
-            loggedInUser.groups.map((group) => (
-              <div key={group._id}>
-                <Typography variant="h6">{group.groupName}</Typography>
-                <Typography>{group.groupDescription}</Typography>
-              </div>
-            ))
-          ) : (
-            <Typography>No groups found for {loggedInUser.username}</Typography>
-          )}
-        </Paper>
-      </div>
-    );
-  }
-
+if(!user?.username) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <Typography variant="h4">
@@ -71,5 +42,36 @@ const Profile = () => {
     </div>
   );
 };
+
+
+return (
+  <div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Typography variant="h4">
+        Welcome to your profile page, {username}!
+      </Typography>
+    </div>
+    {/* <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
+      {username ? `${user.username}'s` : 'Your'} friends have endorsed these skills...
+    </Typography> */}
+
+    <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
+      <Typography>
+        {username}'s Groups
+      </Typography>
+      {user.groups && Array.isArray(user.groups) && user.groups.length > 0 ? (
+        user.groups.map((group) => (
+          <div key={group._id}>
+            <Typography variant="h6">{group.groupName}</Typography>
+            <Typography>{group.groupDescription}</Typography>
+          </div>
+        ))
+      ) : (
+        <Typography>No groups found for {username}</Typography>
+      )}
+    </Paper>
+  </div>
+);
+}
 
 export default Profile;

@@ -13,7 +13,7 @@ const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-                const userData = await User.findOne({ _id: context.user._id })
+                const userData = await User.findOne({ username: context.user.username })
                     .select('-__v -password')
                     .populate('groups')
 
@@ -21,15 +21,15 @@ const resolvers = {
             }
             throw AuthenticationError;
         },
-        user: async (parent, { userId },) => {
-            return await User.findOne({ _id: userId })
+        user: async (parent, { username },) => {
+            return await User.findOne({ username: username })
                 .select('-__v -password')
                  .populate('groups')
         },
         users: async () => {
             return await User.find()
                 .select('-__v -password')
-                .populate('groups')
+                // .populate('groups')
         },
         group: async (parent, { groupId }) => {
             return await Group.findOne({ _id: groupId })
@@ -58,7 +58,7 @@ const resolvers = {
 },
     Mutation: {
         login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ email }).populate('groups');
 
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
