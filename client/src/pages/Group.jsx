@@ -1,7 +1,7 @@
-import { QUERY_SINGLE_GROUP, QUERY_GROUPS } from "../utils/queries";
-import { ADD_POST } from "../utils/mutations";
+import { QUERY_SINGLE_GROUP} from "../utils/queries";
+import { ADD_POST, ADD_USER_TO_GROUP } from "../utils/mutations";
 import Box from "@mui/material/Box";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   CircularProgress,
   Paper,
@@ -29,6 +29,10 @@ export default function Group() {
   const { loading, data } = useQuery(QUERY_SINGLE_GROUP, {
     variables: { groupId },
     pollInterval: 200,
+  });
+
+  const [addUserToGroup] = useMutation(ADD_USER_TO_GROUP, {
+    variables: { groupId },
   });
   const [formData, setFormData] = useState({
     postText: "",
@@ -58,6 +62,17 @@ export default function Group() {
       postText: "",
     });
   };
+  const handleJoinGroup = (groupId) => {;
+    // tokenCheck();
+    try {
+      const { data } = addUserToGroup({
+        variables: { groupId: groupId },
+      });
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   if (loading) {
     return (
@@ -78,6 +93,8 @@ export default function Group() {
   console.log("posts:", posts);
 
   return (
+
+    
     <Box sx={{
       display: "flex",
       alignItems: "center",
@@ -97,7 +114,13 @@ export default function Group() {
         }}
       >
         <Typography variant="h4">{data.group.groupName}</Typography>
+
         <Typography variant="body1">{data.group.groupDescription}</Typography>
+        <Link onClick={() => handleJoinGroup(data.group._id)}>
+            <Button type="submit" variant="contained" color="primary">
+              Join Group
+            </Button>
+        </Link>
         <CardContent>
           <Typography variant="h5" component="div">
             Create New Post
