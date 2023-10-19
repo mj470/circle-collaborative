@@ -11,10 +11,9 @@ const Profile = () => {
   const { username } = useParams();
 
   const { loading, data } = useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, {
-    variables: { username: username },
+    variables: { username },
   });
 
-  console.log('username', useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, { variables: { username: username } }))
 
   const user = data?.me || data?.user || {};
 
@@ -46,7 +45,7 @@ const Profile = () => {
         }}
       >
             <Typography variant="h4">
-              Welcome to your profile page, {username}!
+              Welcome to your profile page, {user.username}!
             </Typography>
   
         <Avatar
@@ -56,12 +55,12 @@ const Profile = () => {
         />
   
         <Typography variant="h4" component="div" sx={{ p: 2 }}>
-        {username}s Groups
+        {user.username}s Groups
         </Typography>
   
         <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
             <Typography>
-              {username}s Groups
+              {user.username}s Groups
             </Typography>
             {user.groups && Array.isArray(user.groups) && user.groups.length > 0 ? (
               user.groups.map((group) => (
