@@ -185,3 +185,31 @@ mutation DeleteUserFromGroup($groupId: ID!) {
   }
 }
 `
+
+export const ADD_GROUP = gql`
+mutation AddGroup($groupName: String!, $groupDescription: String, $image: String!) {
+  addGroup(groupName: $groupName, groupDescription: $groupDescription, image: $image) {
+    _id
+    groupDescription
+    groupName
+    image
+    members {
+      _id
+      username
+      email
+    }
+    posts {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+}
+`;

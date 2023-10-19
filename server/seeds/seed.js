@@ -15,8 +15,8 @@ db.once('open', async () => {
     await cleanDB('User', 'users');
 
     console.log('seeding database')
-    await User.create(userSeeds);
     await Group.create(groupSeeds);
+    await User.create(userSeeds);
 
 
   } catch (err) {

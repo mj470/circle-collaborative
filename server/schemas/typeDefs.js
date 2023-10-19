@@ -69,7 +69,7 @@ type Mutation {
     login(email: String!, password: String!): Auth
     addUserToGroup(groupId: ID!): Membership
     addPost(postText: String!, groupId: ID!): Post
-    addGroup(groupName: String!, groupDescription: String): Group
+    addGroup(groupName: String!, groupDescription: String, image: String!): Group
     addComment(postId: ID!, commentText: String!): Post
     deleteUser : User
     deleteInterestFromUser(interestId: String!): User
