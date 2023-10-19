@@ -15,11 +15,12 @@ const Profile = () => {
   });
 
   console.log('data', data)
-  console.log('username', username)
+  console.log('username', useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, { variables: { username: username } }))
 
   const user = data?.me || data?.user || {};
 
-  const loggedInUser = AuthService.getUser()?.data;
+  const loggedInUser = AuthService.getUser(username)?.data;
+  console.log("AuthService", AuthService.getUser())
 
   if (AuthService.loggedIn() && loggedInUser.username === username) {
     redirect('/');
