@@ -124,12 +124,11 @@ export default function Projects() {
     });
   };
 
-  const handleJoinGroup = (event) => {
-    event.preventDefault();
+  const handleJoinGroup = (groupId) => {;
     tokenCheck();
     try {
       const { data } = addUserToGroup({
-        variables: { groupId },
+        variables: { groupId: groupId },
       });
       console.log(data);
     } catch (err) {
@@ -168,7 +167,7 @@ export default function Projects() {
         >
           {cardData.map((card) => (
             <SwiperSlide
-              key={card.key}
+              key={card._id}
               className="swiper-slide"
               sx={{
                 display: "flex",
@@ -184,18 +183,18 @@ export default function Projects() {
                 <CardMedia
                   sx={{ height: 400 }}
                   image={card.image}
-                  title={card.title}
+                  title={card.groupName}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {card.title}
+                    {card.groupName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {card.description}
+                    {card.groupDescription}
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
+                  <Link  onClick={() => handleJoinGroup}>
                   <Button size="small">
                     Join Group
                   </Button>
@@ -250,6 +249,7 @@ export default function Projects() {
                       <MoreVertIcon />
                     </IconButton>
                     </Link>
+                    
                   }
                   title={card.groupName}
                 />
@@ -263,6 +263,14 @@ export default function Projects() {
                     {card.groupDescription}
                   </Typography>
                 </CardContent>
+                <Link  to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
+                  <Button size="small">
+                    Join Group
+                  </Button>
+                  </Link>
+                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
+                    <Button size="small">Add Post</Button>
+                  </Link>
               </Box>
             </Card>
           ))}
