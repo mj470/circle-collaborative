@@ -3,6 +3,9 @@ import { useQuery } from '@apollo/client';
 import { QUERY_SINGLE_USER, QUERY_ME } from '../utils/queries';
 import AuthService from '../utils/auth';
 import { CircularProgress, Paper, Typography } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Circle1Image from '../assets/images/circle1.png';
+import Box from '@mui/material/Box';
 
 const Profile = () => {
   const { username } = useParams();
@@ -34,42 +37,50 @@ const Profile = () => {
 
   if (!data) {
     return (
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-          <Typography variant="h4">
-            Welcome to your profile page, {loggedInUser.username}!
-          </Typography>
-        </div>
-        <Typography variant="h4" component="div" sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
-          {username ? `${user.username}'s` : 'Your'} friends have endorsed these skills...
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          bgcolor: 'primary.main',
+          color: 'white',
+          margin: '5px',
+          width: '100%',
+        }}
+      >
+            <Typography variant="h4">
+              Welcome to your profile page, {loggedInUser.username}!
+            </Typography>
+  
+        <Avatar
+          alt="Remy Sharp"
+          src={Circle1Image}
+          sx={{ width: 400, height: 400 }}
+        />
+  
+        <Typography variant="h4" component="div" sx={{ p: 2 }}>
+        {loggedInUser.username}s Groups
         </Typography>
-
+  
         <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
-          <Typography>
-            {loggedInUser.username}s Groups
-          </Typography>
-          {loggedInUser.groups && Array.isArray(loggedInUser.groups) && loggedInUser.groups.length > 0 ? (
-            loggedInUser.groups.map((group) => (
-              <div key={group._id}>
-                <Typography variant="h6">{group.groupName}</Typography>
-                <Typography>{group.groupDescription}</Typography>
-              </div>
-            ))
-          ) : (
-            <Typography>No groups found for {loggedInUser.username}</Typography>
-          )}
-        </Paper>
-      </div>
+            <Typography>
+              {loggedInUser.username}s Groups
+            </Typography>
+            {loggedInUser.groups && Array.isArray(loggedInUser.groups) && loggedInUser.groups.length > 0 ? (
+              loggedInUser.groups.map((group) => (
+                <div key={group._id}>
+                  <Typography variant="h6">{group.groupName}</Typography>
+                  <Typography>{group.groupDescription}</Typography>
+                </div>
+              ))
+            ) : (
+              <Typography>No groups found for {loggedInUser.username}</Typography>
+            )}
+          </Paper>
+      </Box>
     );
   }
-
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Typography variant="h4">
-        You need to be logged in to see your profile page. Use the navigation links above to sign up or log in!
-      </Typography>
-    </div>
-  );
 };
-
-export default Profile;
+  export default Profile;
