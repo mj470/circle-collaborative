@@ -9,7 +9,7 @@ import ProfilePage from './pages/Profile';
 import ContactPage from './pages/Contact';
 import AboutUsPage from './pages/AboutUs';
 import SignInPage from './pages/SignIn';
-import SignUpPage from './pages/SignUp.jsx';
+import SignUpPage from './pages/Signup';
 
 
 const router = createBrowserRouter([
