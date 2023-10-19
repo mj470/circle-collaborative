@@ -15,9 +15,12 @@ import Auth from "../utils/auth";
 export default function Group() {
     const theme = useTheme();
     const { groupId } = useParams();
-    const [addPost, { error }] = useMutation(ADD_POST);
+    const [addPost, { error }] = useMutation(ADD_POST, {
+        variables: { groupId },
+    });
     const { loading, data } = useQuery(QUERY_SINGLE_GROUP, {
-        variables: { groupId }
+        variables: { groupId },
+        pollInterval: 200,
     });
     const [formData, setFormData] = useState({
         postText: "",
@@ -78,7 +81,7 @@ export default function Group() {
                 <TextField
                   fullWidth
                   label="New Post"
-                  name="postName"
+                  name="postText"
                   value={formData.postText}
                   onChange={handleChange}
                 />
