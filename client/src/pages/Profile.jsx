@@ -14,20 +14,14 @@ const Profile = () => {
     variables: { username: username },
   });
 
-  console.log('data', data)
   console.log('username', useQuery(username ? QUERY_SINGLE_USER : QUERY_ME, { variables: { username: username } }))
 
   const user = data?.me || data?.user || {};
 
-  const loggedInUser = AuthService.getUser(username)?.data;
-  console.log("AuthService", AuthService.getUser())
-
-  if (AuthService.loggedIn() && loggedInUser.username === username) {
+  if (AuthService.loggedIn()) {
     redirect('/');
   }
-  console.log("logged in user:", loggedInUser)
-  console.log("logged in user groups:", loggedInUser.groups)
-  console.log('user', user)
+
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -36,7 +30,7 @@ const Profile = () => {
     );
   }
 
-  if (!data) {
+  if (data) {
     return (
       <Box
         sx={{
@@ -52,7 +46,7 @@ const Profile = () => {
         }}
       >
             <Typography variant="h4">
-              Welcome to your profile page, {loggedInUser.username}!
+              Welcome to your profile page, {username}!
             </Typography>
   
         <Avatar
@@ -62,22 +56,22 @@ const Profile = () => {
         />
   
         <Typography variant="h4" component="div" sx={{ p: 2 }}>
-        {loggedInUser.username}s Groups
+        {username}s Groups
         </Typography>
   
         <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
             <Typography>
-              {loggedInUser.username}s Groups
+              {username}s Groups
             </Typography>
-            {loggedInUser.groups && Array.isArray(loggedInUser.groups) && loggedInUser.groups.length > 0 ? (
-              loggedInUser.groups.map((group) => (
+            {user.groups && Array.isArray(user.groups) && user.groups.length > 0 ? (
+              user.groups.map((group) => (
                 <div key={group._id}>
                   <Typography variant="h6">{group.groupName}</Typography>
                   <Typography>{group.groupDescription}</Typography>
                 </div>
               ))
             ) : (
-              <Typography>No groups found for {loggedInUser.username}</Typography>
+              <Typography>No groups found for {username}</Typography>
             )}
           </Paper>
       </Box>

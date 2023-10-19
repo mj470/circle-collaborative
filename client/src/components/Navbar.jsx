@@ -19,13 +19,20 @@ import { Link } from 'react-router-dom';
 import AuthService from '../utils/auth';
 import circleLogoImage from '../assets/images/circle-logo.png';
 import { styled, alpha } from '@mui/material/styles';
+import { useParams } from 'react-router-dom';
 
 const pages = ['CircleGroups', 'Profile', 'Contact', 'AboutUs'];
 
 const Navbar = () => {
+  const { username } = useParams();
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
+  // const loggedInUser = AuthService.getUser(username)?.data;
+  // console.log("AuthService", AuthService.getUser())
+
+  // console.log("navbar loggedIn user:",loggedInUser);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
