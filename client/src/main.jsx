@@ -10,6 +10,7 @@ import ContactPage from './pages/Contact';
 import AboutUsPage from './pages/AboutUs';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/Signup';
+import GroupPage from './pages/Group';
 import './main.css'
 
 
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
         path: '/signup',
         element: <SignUpPage />,
       },
+      {
+        path: '/CircleGroups/:groupId',
+        element: <GroupPage />,
+      }
     ],
   },
 ]);

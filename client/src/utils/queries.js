@@ -69,20 +69,21 @@ query allGroups {
 `;
 
 export const QUERY_SINGLE_GROUP = gql`
-query singleGroup($groupId: ID!) {
+query Group($groupId: ID!) {
   group(groupId: $groupId) {
     _id
     groupName
     groupDescription
-    image
-    users {
+    members {
       _id
       username
     }
+    image
     posts {
       _id
       postText
       postAuthor
+      createdAt
     }
   }
 }
