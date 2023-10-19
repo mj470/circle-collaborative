@@ -199,9 +199,9 @@ export default function Projects() {
                     Join Group
                   </Button>
                   </Link>
-                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
+                  {/* <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
                     <Button size="small">Add Post</Button>
-                  </Link>
+                  </Link> */}
                 </CardActions>
               </Card>
             </SwiperSlide>
@@ -268,9 +268,9 @@ export default function Projects() {
                     Join Group
                   </Button>
                   </Link>
-                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
+                  {/* <Link to={`/CircleGroups/${card._id}`} onClick={() => handleMoreVertClick(card._id)}>
                     <Button size="small">Add Post</Button>
-                  </Link>
+                  </Link> */}
               </Box>
             </Card>
           ))}
