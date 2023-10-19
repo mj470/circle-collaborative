@@ -45,8 +45,8 @@ const About = () => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ bgcolor: 'primary.main', color: 'white', textAlign: 'center', minHeight: '100vh', p: 5 }}>
-      <Typography variant="h3" sx={{ p: 5 }}>Our Team</Typography>
+    <Box sx={{ bgcolor: 'primary.main', color: 'white', textAlign: 'center', m: 1, border: `1px solid ${theme.palette.primary.main}`, boxShadow: '0px 5px 15px rgba(0, 1, 1, .75)', borderRadius: '10px'}}>
+      <Typography variant="h2" sx={{ p: 5 }}>Our Team</Typography>
 
       <Grid container spacing={2}>
         {teamMembers.map((member, index) => (
@@ -56,13 +56,23 @@ const About = () => {
               boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)', // Add box shadow
               background: `linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`,
               borderRadius: '10px', // Add rounded corners
+              m: 1
             }}>
-              <CardContent>
+              <CardContent >
+
                 <Avatar alt={member.name} src={member.image} sx={{ width: 300, height: 300, margin: '0 auto 1rem auto' }} />
-                <Typography variant="h5">{member.name}</Typography>
-                <Typography variant="body1">{member.role}</Typography>
+                <Box sx={{
+              border: `1px solid ${theme.palette.primary.main}`, // Add border style
+              boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)', // Add box shadow
+              color: 'white',
+              background: `linear-gradient(225deg, ${theme.palette.primary.main} 100%, ${theme.palette.secondary.main} 0%)`,
+              borderRadius: '10px', // Add rounded corners
+            }}>
+                <Typography variant="h4">{member.name}</Typography>
+                <Typography variant="h6">{member.role}</Typography>
                 <Typography variant="body1"><a href={member.github}>GitHub</a></Typography>
                 <Typography variant="body1"><a href={member.linkedin}>LinkedIn</a></Typography>
+                </Box>
               </CardContent>
             </Card>
           </Grid>

@@ -4,6 +4,7 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -97,21 +98,21 @@ export default function Projects() {
     groupName: "",
     groupDescription: "",
     image: "",
-  })
-  const [addGroup, { error }] = useMutation(ADD_GROUP)
+  });
+  const [addGroup, { error }] = useMutation(ADD_GROUP);
   const { loading, data } = useQuery(QUERY_GROUPS, {
     pollInterval: 200,
-  })
-  
-  const cardData = data?.allGroups || []
+  });
+
+  const cardData = data?.allGroups || [];
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value })
-  }
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     if (!token) {
       return false;
@@ -121,134 +122,180 @@ export default function Projects() {
       const { data } = addGroup({
         variables: { ...formData },
       });
-     console.log(data);
-
-    }catch (err) {
-      console.error(err)
+      console.log(data);
+    } catch (err) {
+      console.error(err);
     }
-    
+
     setFormData({
       groupName: "",
       groupDescription: "",
       image: "",
-    })
-  }
+    });
+  };
 
   const theme = useTheme();
 
   return (
     <div>
-      <Swiper
-        id="your-unique-id"
-        navigation
-        pagination
-        autoplay={{ delay: 3000 }}
-        className="your-swiper-class"
+      <Box
+        sx={{
+          background: `linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`,
+          borderRadius: "10px",
+          m: 1,
+        }}
       >
-        {swiperSlides.map((slide) => (
-          <SwiperSlide
-            key={slide.key}
-            className="swiper-slide"
+        <Swiper
+          id="your-unique-id"
+          navigation
+          pagination
+          autoplay={{ delay: 3000 }}
+          className="your-swiper-class"
+        >
+          {swiperSlides.map((slide) => (
+            <SwiperSlide
+              key={slide.key}
+              className="swiper-slide"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 400,
+                width: "100%",
+                background:
+                  "linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)",
+              }}
+            >
+              <Card sx={{ maxWidth: "100vh", m: 5, mx: "auto" }}>
+                <CardMedia
+                  sx={{ height: 400 }}
+                  image={slide.image}
+                  title={slide.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {slide.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {slide.description}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" href={slide.githubLink}>
+                    Add to Favorites
+                  </Button>
+                  <Button size="small" href={slide.demoLink}>
+                    Share
+                  </Button>
+                </CardActions>
+              </Card>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
+      <Box
+        sx={{
+          background: `linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`,
+          borderRadius: "10px",
+          m: 1,
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(345px, 1fr))",
+            gap: "20px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {cardData.map((card, index) => (
+            <Card
+              key={index}
+              sx={{
+                maxWidth: 345,
+                p: 2,
+                m: 2,
+                background: theme.palette.secondary.main,
+                borderRadius: "10px",
+                m: 1,
+                boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <Box sx={{ background: "white", borderRadius: "10px", m: 1 }}>
+                <CardHeader
+                  avatar={
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                      {card.groupName[0]}
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={card.groupName}
+                />
+              </Box>
+              <Box sx={{ borderRadius: "10px", m: 1 }}>
+                <CardMedia component="img" height="194" image={card.image} />
+              </Box>
+              <Box sx={{ background: "white", borderRadius: "10px", m: 1 }}>
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    {card.groupDescription}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          ))}
+          <Card
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 400,
-              width: "100%",
-              background: 'linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)',
+              maxWidth: 345,
+              p: 2,
+              m: 2,
+              background: "white",
+              borderRadius: "10px",
+              m: 1,
+              boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
             }}
           >
-            <Card sx={{ maxWidth: "100vh", m: 5, mx: "auto" }}>
-              <CardMedia
-                sx={{ height: 400 }}
-                image={slide.image}
-                title={slide.title}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {slide.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {slide.description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" href={slide.githubLink}>
-                  Add to Favorites
-                </Button>
-                <Button size="small" href={slide.demoLink}>
-                  Share
-                </Button>
-              </CardActions>
-            </Card>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(345px, 1fr))",
-       gap: "20px", justifyContent: "center", alignItems: "center",}}>
-        {cardData.map((card, index) => (
-          <Card key={index} sx={{ maxWidth: 345 }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  R
-                </Avatar>
-              }
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={card.groupName}
-            />
-            <CardMedia
-              component="img"
-              height="194"
-              image={card.image}
-            />
             <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {card.groupDescription}
+              <Typography variant="h5" component="div">
+                Create New Group
               </Typography>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  label="New Group"
+                  name="groupName"
+                  value={formData.groupName}
+                  onChange={handleChange}
+                />
+                <TextField
+                  fullWidth
+                  label="Group Description"
+                  name="groupDescription"
+                  value={formData.groupDescription}
+                  onChange={handleChange}
+                  multiline
+                  rows={3}
+                />
+                <TextField
+                  fullWidth
+                  label="Image"
+                  name="image"
+                  value={formData.image}
+                  onChange={handleChange}
+                />
+                <Button type="submit" variant="contained" color="primary">
+                  Submit
+                </Button>
+              </form>
             </CardContent>
           </Card>
-        ))}
-      </div>
-      <Card sx={{ maxWidth: 345 }}>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Create New Group
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="New Group"
-            name="groupName"
-            value={formData.groupName}
-            onChange={handleChange}
-          />
-          <TextField
-            fullWidth
-            label="Group Description"
-            name="groupDescription"
-            value={formData.groupDescription}
-            onChange={handleChange}
-            multiline
-            rows={3}
-          />
-          <TextField
-            fullWidth
-            label="Image"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        </div>
+      </Box>
     </div>
   );
 }

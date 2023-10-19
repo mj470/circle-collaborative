@@ -10,7 +10,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 const Footer = () => {
   return (
     <div>
-      <Container sx={{ padding: "20px 0", textAlign: "center" }}>
+      <Container sx={{ fontWeight: 'bold', bgcolor: 'white', color: 'black', m:'auto', p:2, boxShadow: '0px 5px 15px rgba(0, 0, 0, 1)', textAlign: 'center'}}>
         <Typography variant="body2">
           © 2023{" "}
           <Link
