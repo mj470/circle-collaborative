@@ -44,13 +44,26 @@ export const QUERY_GROUPS = gql`
 query allGroups {
   allGroups {
     _id
-    groupName
     groupDescription
+    groupName
     image
-  }
-  members {
-    _id
-    username
+    members {
+      _id
+      email
+      username
+    }
+    posts {
+      _id
+      comments {
+        _id
+        commentAuthor
+        commentText
+        createdAt
+      }
+      createdAt
+      postAuthor
+      postText
+    }
   }
 }
 `;

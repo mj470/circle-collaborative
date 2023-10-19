@@ -21,6 +21,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { ADD_GROUP } from "../utils/mutations";
+import { useMutation, useQuery } from "@apollo/client";
+import { QUERY_GROUPS } from "../utils/queries";
+
+import Auth from "../utils/auth";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -100,131 +105,174 @@ const swiperSlides = [
   // Add more objects for additional slides
 ];
 
-const cardData = [
-  {
-    title: "BOSS RUSH: Help With Elden Ring",
-    subheader: "created September 14, 2022",
-    description:
-      "Need help with a boss in Elden Ring? Look no further! This is a community of gamers who are here to help you with any boss in the game.",
-    avatar: [
-      <Avatar
-        key="remy"
-        alt="Remy Sharp"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/0058eb5e3b83e122f477caf4e95aeb3ba58c734f.jpg"
-      />,
-      <Avatar
-        key="travis"
-        alt="Travis Howard"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/48/4865df7500d40a20f587232aedba042b66490365_full.jpg"
-      />,
-      <Avatar
-        key="cindy"
-        alt="Cindy Baker"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00026c8b473f3ae6a9ecb8ec8ef64277ff014fdd_full.jpg"
-      />,
-    ],
-    image:
-      "https://static.bandainamcoent.eu/high/elden-ring/elden-ring/00-page-setup/elden-ring-new-header-mobile.jpg",
-    rules: "No spoilers allowed.",
-  },
-  {
-    title: "Chad Cooks Cooking Good Stuff",
-    subheader: "created April 21, 2023",
-    description:
-      "A community for food lovers to discuss, discover, and share culinary delights from around the world. *Must have at least 1000 hours in the kitchen to join. No exceptions.",
-    avatar: [
-      <Avatar key="h" sx={{ bgcolor: red[700] }}>
-        H
-      </Avatar>,
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/d4/d452c23d8d69c90acfd349ddc751bed6eaf0033e_full.jpg"
-      />,
-      <Avatar key="op" sx={{ bgcolor: red[200] }}>
-        M
-      </Avatar>,
-    ],
-    image:
-      "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/60/60c3b4b8fdf4f2a52c6a245a86c6235cc37245fa_full.jpg",
-    rules: "No pineapple on pizza allowed.",
-  },
-  {
-    title: "Painting with Bob Ross",
-    subheader: "created May 1, 2023",
-    description:
-      "Bob Ross fan appreciation club. Happy little trees, happy little clouds, and happy little accidents.",
-    avatar: [
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/17/17ca7dd2e4d785704ec0a5110d6f5b78250fba21_full.jpg"
-      />,
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/b7/b724cbb01115f23933278caa2b1b69607596e210_full.jpg"
-      />,
-      <Avatar key="op" sx={{ bgcolor: red[300] }}>
-        X
-      </Avatar>,
-    ],
-    image:
-      "https://fivethirtyeight.com/wp-content/uploads/2014/04/bob-ross.jpg?w=575",
-    rules: "No happy little accidents allowed.",
-  },
-  {
-    title: "Anime Lovers",
-    subheader: "created October 10, 2023",
-    description:
-      "A community for anime lovers to discuss, discover, and share their favorite anime shows and movies. You better be a fan of sub, dub lover need not apply~",
-    avatar: [
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/94/9479354b60ec01e0b8c30e19a4de31db953a0f4d_full.jpg"
-      />,
-      <Avatar
-        key="kevin"
-        alt="Kevin Long"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00dbbb4f0c7f5258a3a0f5344c5f43d79cb7c9a3_full.jpg"
-      />,
-      <Avatar key="op" sx={{ bgcolor: red[900] }}>
-        L
-      </Avatar>,
-    ],
-    image:
-      "https://img.asmedia.epimg.net/resizer/wxh6IMusogGgiagzmGNrRBSc9oI=/1472x1104/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/LTIVGUD6RZOQDDDTBEYXRUVATY.jpg",
-    rules: "No weebs allowed.",
-  },
-  {
-    title: "Music for the Soul",
-    subheader: "created May 30, 2023",
-    description:
-      "A community for music lovers to discuss, discover, and share their favorite music. *Must have at least 1000 hours of listening to music to join. No exceptions.",
-    avatar: [
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/a2/a284225d8a716565dfe1b17692baa72d8c06217c_full.jpg"
-      />,
-      <Avatar key="op" sx={{ bgcolor: red[100] }}>
-        T
-      </Avatar>,
-      <Avatar
-        key="eli"
-        alt="Eli Montoya"
-        src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/4e/4e532618d106c64fdcc67e054a4de16d94109f0f_full.jpg"
-      />,
-    ],
-    image:
-      "https://images.macrumors.com/t/vMbr05RQ60tz7V_zS5UEO9SbGR0=/1600x900/smart/article-new/2018/05/apple-music-note.jpg",
-    rules: "No country music allowed.",
-  },
-];
+// const cardData = [
+//   {
+//     title: "BOSS RUSH: Help With Elden Ring",
+//     subheader: "created September 14, 2022",
+//     description:
+//       "Need help with a boss in Elden Ring? Look no further! This is a community of gamers who are here to help you with any boss in the game.",
+//     avatar: [
+//       <Avatar
+//         key="remy"
+//         alt="Remy Sharp"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/0058eb5e3b83e122f477caf4e95aeb3ba58c734f.jpg"
+//       />,
+//       <Avatar
+//         key="travis"
+//         alt="Travis Howard"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/48/4865df7500d40a20f587232aedba042b66490365_full.jpg"
+//       />,
+//       <Avatar
+//         key="cindy"
+//         alt="Cindy Baker"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00026c8b473f3ae6a9ecb8ec8ef64277ff014fdd_full.jpg"
+//       />,
+//     ],
+//     image:
+//       "https://static.bandainamcoent.eu/high/elden-ring/elden-ring/00-page-setup/elden-ring-new-header-mobile.jpg",
+//     rules: "No spoilers allowed.",
+//   },
+//   {
+//     title: "Chad Cooks Cooking Good Stuff",
+//     subheader: "created April 21, 2023",
+//     description:
+//       "A community for food lovers to discuss, discover, and share culinary delights from around the world. *Must have at least 1000 hours in the kitchen to join. No exceptions.",
+//     avatar: [
+//       <Avatar key="h" sx={{ bgcolor: red[700] }}>
+//         H
+//       </Avatar>,
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/d4/d452c23d8d69c90acfd349ddc751bed6eaf0033e_full.jpg"
+//       />,
+//       <Avatar key="op" sx={{ bgcolor: red[200] }}>
+//         M
+//       </Avatar>,
+//     ],
+//     image:
+//       "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/60/60c3b4b8fdf4f2a52c6a245a86c6235cc37245fa_full.jpg",
+//     rules: "No pineapple on pizza allowed.",
+//   },
+//   {
+//     title: "Painting with Bob Ross",
+//     subheader: "created May 1, 2023",
+//     description:
+//       "Bob Ross fan appreciation club. Happy little trees, happy little clouds, and happy little accidents.",
+//     avatar: [
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/17/17ca7dd2e4d785704ec0a5110d6f5b78250fba21_full.jpg"
+//       />,
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/b7/b724cbb01115f23933278caa2b1b69607596e210_full.jpg"
+//       />,
+//       <Avatar key="op" sx={{ bgcolor: red[300] }}>
+//         X
+//       </Avatar>,
+//     ],
+//     image:
+//       "https://fivethirtyeight.com/wp-content/uploads/2014/04/bob-ross.jpg?w=575",
+//     rules: "No happy little accidents allowed.",
+//   },
+//   {
+//     title: "Anime Lovers",
+//     subheader: "created October 10, 2023",
+//     description:
+//       "A community for anime lovers to discuss, discover, and share their favorite anime shows and movies. You better be a fan of sub, dub lover need not apply~",
+//     avatar: [
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/94/9479354b60ec01e0b8c30e19a4de31db953a0f4d_full.jpg"
+//       />,
+//       <Avatar
+//         key="kevin"
+//         alt="Kevin Long"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00dbbb4f0c7f5258a3a0f5344c5f43d79cb7c9a3_full.jpg"
+//       />,
+//       <Avatar key="op" sx={{ bgcolor: red[900] }}>
+//         L
+//       </Avatar>,
+//     ],
+//     image:
+//       "https://img.asmedia.epimg.net/resizer/wxh6IMusogGgiagzmGNrRBSc9oI=/1472x1104/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/LTIVGUD6RZOQDDDTBEYXRUVATY.jpg",
+//     rules: "No weebs allowed.",
+//   },
+//   {
+//     title: "Music for the Soul",
+//     subheader: "created May 30, 2023",
+//     description:
+//       "A community for music lovers to discuss, discover, and share their favorite music. *Must have at least 1000 hours of listening to music to join. No exceptions.",
+//     avatar: [
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/a2/a284225d8a716565dfe1b17692baa72d8c06217c_full.jpg"
+//       />,
+//       <Avatar key="op" sx={{ bgcolor: red[100] }}>
+//         T
+//       </Avatar>,
+//       <Avatar
+//         key="eli"
+//         alt="Eli Montoya"
+//         src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/4e/4e532618d106c64fdcc67e054a4de16d94109f0f_full.jpg"
+//       />,
+//     ],
+//     image:
+//       "https://images.macrumors.com/t/vMbr05RQ60tz7V_zS5UEO9SbGR0=/1600x900/smart/article-new/2018/05/apple-music-note.jpg",
+//     rules: "No country music allowed.",
+//   },
+// ];
 
 export default function Projects() {
   const [expanded, setExpanded] = useState(false);
+  const [formData, setFormData] = useState({
+    groupName: "",
+    groupDescription: "",
+    image: "",
+  })
+  const [addGroup, { error }] = useMutation(ADD_GROUP)
+  const { loading, data } = useQuery(QUERY_GROUPS, {
+    pollInterval: 200,
+  })
+
+  const cardData = data?.allGroups || []
+
+
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+    if (!token) {
+      return false;
+    }
+    try {
+      console.log(formData);
+      const { data } = addGroup({
+        variables: { ...formData },
+      });
+     console.log(data);
+
+    }catch (err) {
+      console.error(err)
+    }
+    
+    setFormData({
+      groupName: "",
+      groupDescription: "",
+      image: "",
+    })
+  }
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -293,21 +341,21 @@ export default function Projects() {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={card.title}
-              subheader={card.subheader}
+              title={card.groupName}
+              // subheader={card.groupDescription}
             />
             <CardMedia
               component="img"
               height="194"
               image={card.image}
-              alt={card.alt}
+              // alt={card.alt}
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {card.description}
+                {card.groupDescription}
               </Typography>
             </CardContent>
-            <CardActions disableSpacing>
+            {/* <CardActions disableSpacing>
               <IconButton aria-label="add to favorites">
                 <FavoriteIcon />
               </IconButton>
@@ -322,8 +370,8 @@ export default function Projects() {
               >
                 <ExpandMoreIcon />
               </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            </CardActions> */}
+            {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
                 <Typography paragraph>Members:</Typography>
                 <Typography paragraph>
@@ -336,9 +384,43 @@ export default function Projects() {
                 <Typography>Rules:</Typography>
                 <Typography>{card.rules}</Typography>
               </CardContent>
-            </Collapse>
+            </Collapse> */}
           </Card>
         ))}
+      </div>
+      <div>
+        <h3>create new group</h3>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="groupName">New Group</label>
+          <input 
+          type="text"
+          onChange={handleChange}
+          value={formData.groupName}
+          name="groupName"
+            />
+          </div>
+          <div>
+            <label htmlFor="groupDescription">Group Description</label>
+            <textarea 
+            name="groupDescription"  
+            cols="12" rows="3" 
+            value={formData.groupDescription}
+            onChange={handleChange}
+            ></textarea>
+
+          </div>
+          <div>
+            <label htmlFor="image">Image</label>
+            <input 
+             type="text"
+             onChange={handleChange}
+             value={formData.image}
+             name="image"
+            />
+          </div>
+           <button type="submit">Submit</button>
+        </form>
       </div>
     </div>
   );
