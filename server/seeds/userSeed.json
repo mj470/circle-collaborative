@@ -1,0 +1,37 @@
+[
+    {
+        "username": "KevinwiththeGoodHair",
+        "email": "kevin.puppetmaster@email.com",
+        "password": "hashedPassword1"
+    },
+    {
+        "username": "EliLuvsCats",
+        "email": "eli.catwhisperer@email.com",
+        "password": "hashedPassword2"
+    },
+    {
+        "username": "ChanMan",
+        "email": "charchandler@email.com",
+        "password": "hashedPassword3"
+    },
+    {
+        "username": "JakeFromStateFarm",
+        "email": "jaketest@test.com",
+        "password": "mypassword"
+    },
+    {
+        "username": "MarenFromParis",
+        "email": "marentest@test.com",
+        "password": "mypassword"
+    },
+    {
+        "username": "RobbinFromTheHood",
+        "email": "robbintest@test.com",
+        "password": "mypassword"
+    },
+    {
+        "username": "CatLover",
+        "email":"catherinetest@test.com",
+        "password": "mypassword"
+    }
+]

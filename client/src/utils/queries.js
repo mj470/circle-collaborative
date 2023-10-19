@@ -23,6 +23,7 @@ query users {
       groupName
   }
 }
+}
 `;
 
 export const QUERY_SINGLE_USER = gql`
@@ -36,6 +37,7 @@ query singleUser($username: String!) {
       groupDescription
   }
 }
+}
 `;
 
 export const QUERY_GROUPS = gql`
@@ -44,6 +46,7 @@ query allGroups {
     _id
     groupName
     groupDescription
+    image
   }
   members {
     _id
@@ -58,6 +61,7 @@ query singleGroup($groupId: ID!) {
     _id
     groupName
     groupDescription
+    image
     users {
       _id
       username

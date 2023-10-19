@@ -4,7 +4,7 @@ const { addUser, deleteUser } = require('./userOperations')
 const { addPost, deletePost, editPost } = require('./postOperations')
 const { addComment, deleteComment } = require('./commentOperations')
 
-const { signToken } = require('../utils/auth');
+const { signToken, AuthenticationError } = require('../utils/auth');
 
 const { User, Group, Post } = require('../models');
 
@@ -15,13 +15,14 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
+                    .populate('groups')
 
                 return userData;
             }
-            throw new AuthenticationError('Not logged in');
+            throw AuthenticationError;
         },
         user: async (parent, { userId },) => {
-            return await User.findOne({ _userId: userId })
+            return await User.findOne({ _id: userId })
                 .select('-__v -password')
                  .populate('groups')
         },
@@ -53,7 +54,6 @@ const resolvers = {
             return await Post.find()
                 .populate('comments')
                 .populate('group')
-
     },
 },
     Mutation: {
@@ -67,7 +67,7 @@ const resolvers = {
             const correctPw = await user.isCorrectPassword(password);
 
             if (!correctPw) {
-                throw new AuthenticationError('Incorrect credentials');
+                throw AuthenticationError;
             }
 
             const token = signToken(user);
@@ -89,7 +89,6 @@ const resolvers = {
         // deleteInterestFromUser: deleteInterestFromUser,
         editPost: editPost,
         deleteUserFromGroup: deleteUserFromGroup,
-        addUserToGroup: addUserToGroup,
     }
 }
 
