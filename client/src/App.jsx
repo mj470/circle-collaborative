@@ -7,6 +7,7 @@ import {setContext} from '@apollo/client/link/context';
 import Paper from '@mui/material/Paper';
 import Header from './components/Header';
 import { blue, orange } from '@mui/material/colors';
+import './App.css';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -35,6 +36,12 @@ const theme = createTheme({
     secondary: {
       main: blue[700],
     },
+  },
+  typography: {
+    fontFamily: '"Open Sans", sans-serif',
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 600,
   },
 });
 

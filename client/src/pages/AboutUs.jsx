@@ -51,13 +51,18 @@ const About = () => {
       <Grid container spacing={2}>
         {teamMembers.map((member, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card sx={{ background: `linear-gradient(225deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)` }}>
+            <Card sx={{
+              border: `1px solid ${theme.palette.primary.main}`, // Add border style
+              boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)', // Add box shadow
+              background: `linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`,
+              borderRadius: '10px', // Add rounded corners
+            }}>
               <CardContent>
                 <Avatar alt={member.name} src={member.image} sx={{ width: 300, height: 300, margin: '0 auto 1rem auto' }} />
-                  <Typography variant="h5">{member.name}</Typography>
-                  <Typography variant="body1">{member.role}</Typography>
-                  <Typography variant="body1"><a href={member.github}>GitHub</a></Typography>
-                  <Typography variant="body1"><a href={member.linkedin}>LinkedIn</a></Typography>
+                <Typography variant="h5">{member.name}</Typography>
+                <Typography variant="body1">{member.role}</Typography>
+                <Typography variant="body1"><a href={member.github}>GitHub</a></Typography>
+                <Typography variant="body1"><a href={member.linkedin}>LinkedIn</a></Typography>
               </CardContent>
             </Card>
           </Grid>

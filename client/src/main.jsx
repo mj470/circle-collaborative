@@ -10,6 +10,8 @@ import ContactPage from './pages/Contact';
 import AboutUsPage from './pages/AboutUs';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/Signup';
+import './main.css'
+
 
 
 const router = createBrowserRouter([
