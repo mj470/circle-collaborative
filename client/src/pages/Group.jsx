@@ -94,30 +94,39 @@ export default function Group() {
 
   return (
 
-    
+    <div>
     <Box sx={{
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      height: 400,
-      width: "100%",
+      p: 2,
       background: `linear-gradient(225deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`,
     }}>
     <Container maxWidth="md">
       <Paper
         elevation={3}
         style={{
-          border: `1px solid ${theme.palette.primary.main}`,
+          border: `1px solid ${theme.palette.secondary.main}`,
           boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
           borderRadius: "10px",
           m: 1,
         }}
       >
-        <Typography variant="h4">{data.group.groupName}</Typography>
+        <Typography variant="h4" sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      p: 2,
+    }}>{data.group.groupName}</Typography>
 
-        <Typography variant="body1">{data.group.groupDescription}</Typography>
+        <Typography variant="body1" sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      p: 2,
+    }}>{data.group.groupDescription}</Typography>
         <Link onClick={() => handleJoinGroup(data.group._id)}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" sx={{p: 2, m:2}} >
               Join Group
             </Button>
         </Link>
@@ -172,5 +181,6 @@ export default function Group() {
       </Paper>
     </Container>
     </Box>
+    </div>
   );
 }
