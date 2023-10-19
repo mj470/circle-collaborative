@@ -1,169 +1,126 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useRef } from 'react';
-// import emailjs from '@emailjs/browser';
-import { Snackbar } from '@mui/material';
-
-const Container = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-position: relative;
-z-index: 1;
-align-items: center;
-@media (max-width: 960px) {
-    padding: 0px;
-}
-`
-
-const Wrapper = styled.div`
-position: relative;
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-direction: column;
-width: 100%;
-max-width: 1350px;
-padding: 0px 0px 80px 0px;
-gap: 12px;
-@media (max-width: 960px) {
-    flex-direction: column;
-}
-`
-
-const Title = styled.div`
-font-size: 42px;
-text-align: center;
-font-weight: 600;
-margin-top: 20px;
-  color: ${({ theme }) => theme.text_primary};
-  @media (max-width: 768px) {
-      margin-top: 12px;
-      font-size: 32px;
-  }
-`;
-
-const Desc = styled.div`
-    font-size: 18px;
-    text-align: center;
-    max-width: 600px;
-    color: ${({ theme }) => theme.text_secondary};
-    @media (max-width: 768px) {
-        margin-top: 12px;
-        font-size: 16px;
-    }
-`;
-
-
-const ContactForm = styled.form`
-  width: 95%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.card};
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: rgba(23, 92, 230, 0.15) 0px 4px 24px;
-  margin-top: 28px;
-  gap: 12px;
-`
-
-const ContactTitle = styled.div`
-  font-size: 24px;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text_primary};
-`
-
-const ContactInput = styled.input`
-  flex: 1;
-  background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.text_secondary};
-  outline: none;
-  font-size: 18px;
-  color: ${({ theme }) => theme.text_primary};
-  border-radius: 12px;
-  padding: 12px 16px;
-  &:focus {
-    border: 1px solid ${({ theme }) => theme.primary};
-  }
-`
-
-const ContactInputMessage = styled.textarea`
-  flex: 1;
-  background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.text_secondary};
-  outline: none;
-  font-size: 18px;
-  color: ${({ theme }) => theme.text_primary};
-  border-radius: 12px;
-  padding: 12px 16px;
-  &:focus {
-    border: 1px solid ${({ theme }) => theme.primary};
-  }
-`
-
-const ContactButton = styled.input`
-  width: 100%;
-  text-decoration: none;
-  text-align: center;
-  background: hsla(271, 100%, 50%, 1);
-  background: linear-gradient(225deg, hsla(271, 100%, 50%, 1) 0%, hsla(294, 100%, 50%, 1) 100%);
-  background: -moz-linear-gradient(225deg, hsla(271, 100%, 50%, 1) 0%, hsla(294, 100%, 50%, 1) 100%);
-  background: -webkit-linear-gradient(225deg, hsla(271, 100%, 50%, 1) 0%, hsla(294, 100%, 50%, 1) 100%);
-  padding: 13px 16px;
-  margin-top: 2px;
-  border-radius: 12px;
-  border: none;
-  color: ${({ theme }) => theme.text_primary};
-  font-size: 18px;
-  font-weight: 600;
-`
-
-
+import { useState } from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import PhoneIcon from '@mui/icons-material/Phone';
+import MailIcon from '@mui/icons-material/Mail';
+import validator from 'validator';
+import circle1Image from '../assets/images/circle1.png';
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [emailError, setEmailError] = useState('');
 
-  //hooks
-  const [open, setOpen] = React.useState(false);
-  const form = useRef();
+  const isEmailValid = (value) => validator.isEmail(value);
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     emailjs.sendForm('service_tox7kqs', 'template_nv7k7mj', form.current, 'SybVGsYS52j2TfLbi')
-//       .then((res) => {
-//         setOpen(true);
-//         form.current.reset();
-//       }, (error) => {
-//         console.log(error.text);
-//       });
-//   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    if (isEmailValid(email)) {
+      console.log(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
+      // Clear input fields
+      setName('');
+      setEmail('');
+      setMessage('');
+      setEmailError('');
+    } else {
+      setEmailError('Please enter a valid email address.');
+    }
+  };
 
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setEmail(emailValue);
+
+    if (emailValue === '') {
+      setEmailError(''); // Clear emailError when the email field is empty
+    }
+  };
 
   return (
-    <Container>
-      <Wrapper>
-        <Title>Contact</Title>
-        <Desc>Feel free to reach out to us with any feedback you may have!</Desc>
-        <ContactForm ref={form}>
-          <ContactTitle>Email Us 🚀</ContactTitle>
-          <ContactInput placeholder="Your Email" name="from_email" />
-          <ContactInput placeholder="Your Name" name="from_name" />
-          <ContactInput placeholder="Subject" name="subject" />
-          <ContactInputMessage placeholder="Message" rows="4" name="message" />
-          <ContactButton type="submit" value="Send" />
-        </ContactForm>
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
-          onClose={()=>setOpen(false)}
-          message="Email sent successfully!"
-          severity="success"
-        />
-      </Wrapper>
-    </Container>
-  )
-}
+    <Card sx={{ display: 'flex' }}>
+      <Grid container>
+        <Grid item xs={12} sm={6}>
+          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+            <Typography variant="h4" component="div">
+              For any issues, please contact us!
+            </Typography>
+            <Typography variant="h6" component="div">
+              We are available by email or by leaving us a message below. 
+            </Typography>
+            <Typography variant="h6" component="div" >
+              For any business inquiries, please contact us by phone. 
+            </Typography>
+          </CardContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+            <Button variant="outlined" onClick={() => window.location.href = 'mailto:test@test.com'} sx={{ m: 2 }}>
+              <MailIcon sx={{ mr: 1 }} />
+              Email
+            </Button>
+            <Button variant="outlined" onClick={() => window.location.href = 'tel:+123456789'} sx={{ m: 2 }}>
+              <PhoneIcon sx={{ mr: 1 }} />
+              Phone Number
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', pl: 2, pr: 2 }}>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                required
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                value={email}
+                onChange={handleEmailChange}
+                fullWidth
+                required
+                error={emailError !== ''}
+                helperText={emailError}
+              />
+              <TextField
+                label="Leave a message"
+                variant="outlined"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                fullWidth
+                multiline
+                rows={4}
+                required
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ textAlign: 'center', mt: 1, mb: 1 }}
+              >
+                Submit
+              </Button>
+            </form>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+        <CardMedia
+              component="img"
+              sx={{ height: 600, width: '100%' }}
+              image={circle1Image}
+              alt="Circle Media Image"
+            />
+        </Grid>
+      </Grid>
+    </Card>
+  );
+};
 
-export default Contact
+export default Contact;
