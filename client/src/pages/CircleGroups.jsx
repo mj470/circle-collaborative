@@ -194,7 +194,7 @@ export default function Projects() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Link  onClick={() => handleJoinGroup}>
+                  <Link to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
                   <Button size="small">
                     Join Group
                   </Button>
@@ -263,7 +263,7 @@ export default function Projects() {
                     {card.groupDescription}
                   </Typography>
                 </CardContent>
-                <Link  to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
+                <Link to={`/CircleGroups/${card._id}`} onClick={() => handleJoinGroup(card._id)}>
                   <Button size="small">
                     Join Group
                   </Button>
